@@ -1,3 +1,4 @@
-﻿
-using var game = new battleships.Game1();
+﻿using Battleships;
+
+BattleshipGame game = new BattleshipGame();
 game.Run();
