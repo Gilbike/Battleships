@@ -7,7 +7,7 @@ public class BattleshipGame : Game {
   private GraphicsDeviceManager _graphics;
   private SpriteBatch _batch;
 
-  private Grid grid;
+  private Match currentMatch;
 
   public BattleshipGame() {
     _graphics = new GraphicsDeviceManager(this);
@@ -19,7 +19,7 @@ public class BattleshipGame : Game {
     _batch = new SpriteBatch(GraphicsDevice);
     Window.Title = "Battleships";
 
-    grid = new Grid(GraphicsDevice, new Vector2(10, 10), 250, false);
+    currentMatch = new Match(GraphicsDevice, _batch);
 
     base.Initialize();
   }
@@ -28,7 +28,7 @@ public class BattleshipGame : Game {
     GraphicsDevice.Clear(Color.CornflowerBlue);
 
     _batch.Begin();
-    grid.Render(_batch);
+    currentMatch.Render();
     _batch.End();
 
     base.Draw(time);
