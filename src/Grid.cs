@@ -43,11 +43,16 @@ public class Grid : BaseObject {
       }
     }
 
-    _fields[0].State = FieldState.Ship;
-    _fields[10].State = FieldState.Ship;
-    _fields[20].State = FieldState.Ship;
-    _fields[1].State = FieldState.Hit;
-    _fields[30].State = FieldState.ShipHit;
+    Ship ship = new Ship(3);
+    Vector2[] locations = ship.Place(new Vector2(2, 4), ShipOrientation.Horizontal);
+
+    foreach (Vector2 location in locations) {
+      _fields[GetIndexFromLocationVector(location)].State = FieldState.Ship;
+    }
+  }
+
+  public int GetIndexFromLocationVector(Vector2 location) {
+    return (int)location.Y * 10 + (int)location.X;
   }
 
   public void Render(SpriteBatch batch) {
