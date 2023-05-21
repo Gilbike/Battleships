@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -14,6 +15,8 @@ public class ShipPlacer {
   private Ship currentShip;
   private List<Field> lastFields = new List<Field>();
   private ShipOrientation orientation = ShipOrientation.Horizontal;
+
+  public Action onPlacementDone;
 
   public ShipPlacer(Grid grid) {
     _grid = grid;
@@ -88,9 +91,11 @@ public class ShipPlacer {
       if (!isPlacementValid) return;
       unplacedShips.RemoveAt(unplacedShipIndex);
       if (unplacedShips.Count == 0) {
+        onPlacementDone?.Invoke();
         currentShip = null;
         return;
       }
+      _grid.PlaceShip(currentShip);
       unplacedShipIndex = 0;
       currentShip = new Ship(unplacedShips[unplacedShipIndex]);
       lastFields.Clear();

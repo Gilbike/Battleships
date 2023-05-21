@@ -15,6 +15,7 @@ public class Field : BaseObject {
   private Vector2 _position;
 
   public FieldState State { get; set; }
+  public int ShipID { get; set; }
 
   public Field(Vector2 position, Texture2D texture) {
     _position = position;

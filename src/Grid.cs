@@ -15,6 +15,8 @@ public class Grid : BaseObject {
 
   private Field[] _fields = new Field[10 * 10];
 
+  private Ship[] _ships = new Ship[5];
+
   public Grid(Vector2 position, int size, bool encoded) {
     _position = position;
     _size = size;
@@ -69,6 +71,19 @@ public class Grid : BaseObject {
       }
     }
     return new Vector2(-1, -1);
+  }
+
+  public void PlaceShip(Ship ship) {
+    for (int i = 0; i < _ships.Length; i++) {
+      if (_ships[i] != null)
+        continue;
+
+      _ships[i] = ship;
+      Vector2[] locations = ship.GetLocations();
+      foreach (Vector2 location in locations) {
+        _fields[GetIndexFromLocationVector(location)].ShipID = i;
+      }
+    }
   }
 
   public void Render(SpriteBatch batch) {
