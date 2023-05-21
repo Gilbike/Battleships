@@ -21,6 +21,7 @@ public class BattleshipGame : Game {
 
   public SpriteBatch Batch => _batch;
   public MouseState mouseState { get; private set; }
+  public KeyboardState keyboardState { get; private set; }
 
   private Match currentMatch;
 
@@ -41,6 +42,7 @@ public class BattleshipGame : Game {
 
   protected override void Update(GameTime gameTime) {
     mouseState = Mouse.GetState();
+    keyboardState = Keyboard.GetState();
     currentMatch.Update();
     base.Update(gameTime);
   }

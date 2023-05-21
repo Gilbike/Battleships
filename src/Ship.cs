@@ -22,9 +22,9 @@ public class Ship {
 
   public Vector2[] Place(Vector2 location, ShipOrientation orientation) {
     Vector2 offset = new Vector2(1 - (int)orientation, (int)orientation);
-    locations[0] = location;
-    locations[1] = location + offset;
-    locations[2] = location + offset * 2;
+    for (int i = 0; i < Size; i++) {
+      locations[i] = location + offset * i;
+    }
     return locations;
   }
 }
