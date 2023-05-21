@@ -54,6 +54,10 @@ public class Grid : BaseObject {
     return (int)location.Y * 10 + (int)location.X;
   }
 
+  public Vector2 GetLocationVectorFromIndex(int index) {
+    return new Vector2(index / 10, index % 10);
+  }
+
   public Vector4 GetDimensions() {
     return new Vector4(_position.X, _position.Y, _position.X + _size, _position.Y + _size);
   }
@@ -81,8 +85,12 @@ public class Grid : BaseObject {
       _ships[i] = ship;
       Vector2[] locations = ship.GetLocations();
       foreach (Vector2 location in locations) {
-        _fields[GetIndexFromLocationVector(location)].ShipID = i;
+        int index = GetIndexFromLocationVector(location);
+        System.Console.WriteLine($"placed on grid @{index} with ID {i}");
+        _fields[index].State = FieldState.Ship;
+        _fields[index].ShipID = i;
       }
+      break;
     }
   }
 

@@ -27,6 +27,32 @@ public class ShipPlacer {
     currentShip = new Ship(unplacedShips[unplacedShipIndex]);
   }
 
+  public void PlaceRandom() {
+    Random random = new Random();
+    foreach (int size in SHIPS) {
+      Vector2[] proposedLocations;
+      Ship ship;
+      do {
+        int startField = random.Next(100);
+        ShipOrientation shipOrientation = (ShipOrientation)Math.Round(random.Next(1, 101) / (double)100);
+        ship = new Ship(size);
+        proposedLocations = ship.Place(_grid.GetLocationVectorFromIndex(startField), shipOrientation);
+      } while (!isPlacementValid(proposedLocations));
+      _grid.PlaceShip(ship);
+    }
+  }
+
+  public bool isPlacementValid(Vector2[] locations) {
+    foreach (Vector2 location in locations) {
+      if (location.X > 9 || location.Y > 9) // outside of grid
+        return false;
+      Field field = _grid.GetField(_grid.GetIndexFromLocationVector(location));
+      if (field.State == FieldState.Ship)
+        return false;
+    }
+    return true;
+  }
+
   private bool isRPressed = false;
   private bool isLeftMousePressed = false;
   private int lastWheelValue = 0;

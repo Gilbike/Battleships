@@ -19,9 +19,13 @@ public class Match {
     _batch = BattleshipGame.Instance.Batch;
     _playerGrid = new Grid(new Vector2(10, 10), 305, false);
     _opponentGrid = new Grid(new Vector2(335, 10), 450, true);
+
     _placer = new ShipPlacer(_playerGrid);
     _placer.StartPlayerPlacement();
     _placer.onPlacementDone += onPlacementDone;
+
+    ShipPlacer _aiPlacer = new ShipPlacer(_opponentGrid);
+    _aiPlacer.PlaceRandom();
   }
 
   public void Update() {
