@@ -11,6 +11,7 @@ public class Match {
   private Grid _opponentGrid;
 
   private ShipPlacer _placer;
+  private OpponentAI oppenent;
 
   private MatchState matchState = MatchState.Placement;
 
@@ -27,6 +28,8 @@ public class Match {
 
     ShipPlacer _aiPlacer = new ShipPlacer(_opponentGrid);
     _aiPlacer.PlaceRandom();
+
+    oppenent = new OpponentAI(_playerGrid);
   }
 
   private bool isLeftClicked = false;
@@ -57,6 +60,14 @@ public class Match {
   public void AttackOpponent() {
     Vector2 clickedField = _opponentGrid.GetHoveredField();
     bool didHitShip = _opponentGrid.AttackField(clickedField);
+    if (!didHitShip) {
+      OnTurn = 0;
+      bool didHitPlayer = false;
+      do {
+        didHitPlayer = oppenent.AttackPlayer();
+      } while (didHitPlayer);
+      OnTurn = 1;
+    }
   }
 
   public void Render() {
