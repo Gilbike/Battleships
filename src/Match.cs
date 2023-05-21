@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Battleships;
 
@@ -28,11 +29,22 @@ public class Match {
     _aiPlacer.PlaceRandom();
   }
 
+  private bool isLeftClicked = false;
   public void Update() {
     if (matchState == MatchState.Placement)
       _placer.Update();
     else if (matchState == MatchState.Battle) {
-
+      MouseState state = BattleshipGame.Instance.mouseState;
+      if (state.LeftButton == ButtonState.Pressed && !isLeftClicked) {
+        if (OnTurn == 0)
+          return;
+        Vector4 opponentGridSize = _opponentGrid.GetDimensions();
+        if (state.X < opponentGridSize.X || state.X > opponentGridSize.Z || state.Y < opponentGridSize.Y || state.Y > opponentGridSize.W)
+          return;
+        AttackOpponent();
+        isLeftClicked = true;
+      } else if (state.LeftButton == ButtonState.Released && isLeftClicked)
+        isLeftClicked = false;
     }
   }
 
@@ -40,6 +52,11 @@ public class Match {
     matchState = MatchState.Battle;
     _placer = null;
     OnTurn = 1;
+  }
+
+  public void AttackOpponent() {
+    Vector2 clickedField = _opponentGrid.GetHoveredField();
+    System.Console.WriteLine(clickedField);
   }
 
   public void Render() {

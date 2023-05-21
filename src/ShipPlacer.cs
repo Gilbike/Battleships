@@ -94,7 +94,7 @@ public class ShipPlacer {
       field.State = FieldState.Empty;
     lastFields.Clear();
 
-    Vector2 baseLocation = _grid.GetHoveredField(mState.X, mState.Y);
+    Vector2 baseLocation = _grid.GetHoveredField();
     if (baseLocation == new Vector2(-1, -1)) return;
     Vector2[] shipLocations = currentShip.Place(baseLocation, orientation);
     foreach (Vector2 location in shipLocations) {

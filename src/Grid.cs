@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Battleships;
 
@@ -64,13 +65,15 @@ public class Grid : BaseObject {
     return new Vector4(_position.X, _position.Y, _position.X + _size, _position.Y + _size);
   }
 
-  public Vector2 GetHoveredField(int x, int y) {
+  public Vector2 GetHoveredField() {
+    int x = BattleshipGame.Instance.mouseState.X;
+    int y = BattleshipGame.Instance.mouseState.Y;
     for (int row = 0; row < 10; row++) {
-      if (y < 10 + row * _fieldSize + (row - 1) * FieldGap || y > 10 + (row + 1) * _fieldSize + row * FieldGap)
+      if (y < _position.Y + row * _fieldSize + (row - 1) * FieldGap || y > _position.Y + (row + 1) * _fieldSize + row * FieldGap)
         continue;
 
       for (int col = 0; col < 10; col++) {
-        if (x < 10 + col * _fieldSize + (col - 1) * FieldGap || x > 10 + (col + 1) * _fieldSize + col * FieldGap)
+        if (x < _position.X + col * _fieldSize + (col - 1) * FieldGap || x > _position.X + (col + 1) * _fieldSize + col * FieldGap)
           continue;
 
         return new Vector2(col, row);
