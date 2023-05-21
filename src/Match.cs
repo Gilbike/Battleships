@@ -57,14 +57,14 @@ public class Match {
     OnTurn = 1;
   }
 
-  public void AttackOpponent() {
+  public async void AttackOpponent() {
     Vector2 clickedField = _opponentGrid.GetHoveredField();
     bool didHitShip = _opponentGrid.AttackField(clickedField);
     if (!didHitShip) {
       OnTurn = 0;
       bool didHitPlayer = false;
       do {
-        didHitPlayer = oppenent.AttackPlayer();
+        didHitPlayer = await oppenent.AttackPlayer();
       } while (didHitPlayer);
       OnTurn = 1;
     }
