@@ -1,4 +1,4 @@
 ﻿using Battleships;
 
-BattleshipGame game = new BattleshipGame();
+BattleshipGame game = BattleshipGame.Instance;
 game.Run();

@@ -4,12 +4,25 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Battleships;
 
 public class BattleshipGame : Game {
+  private static BattleshipGame _instance;
+
+  public static BattleshipGame Instance {
+    get {
+      if (_instance == null) {
+        _instance = new BattleshipGame();
+      }
+      return _instance;
+    }
+  }
+
   private GraphicsDeviceManager _graphics;
   private SpriteBatch _batch;
 
+  public SpriteBatch Batch => _batch;
+
   private Match currentMatch;
 
-  public BattleshipGame() {
+  private BattleshipGame() {
     _graphics = new GraphicsDeviceManager(this);
 
     IsMouseVisible = true;
@@ -19,7 +32,7 @@ public class BattleshipGame : Game {
     _batch = new SpriteBatch(GraphicsDevice);
     Window.Title = "Battleships";
 
-    currentMatch = new Match(GraphicsDevice, _batch);
+    currentMatch = new Match();
 
     base.Initialize();
   }

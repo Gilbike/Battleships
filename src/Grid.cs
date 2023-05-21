@@ -15,18 +15,18 @@ public class Grid : BaseObject {
 
   private Field[] _fields = new Field[10 * 10];
 
-  public Grid(GraphicsDevice device, Vector2 position, int size, bool encoded) {
+  public Grid(Vector2 position, int size, bool encoded) {
     _position = position;
     _size = size;
     _encoded = encoded;
     _fieldSize = (size - (FieldGap - 1) * 10) / 10;
 
-    CreateFieldTexture(device);
+    CreateFieldTexture();
     CreateFields();
   }
 
-  private void CreateFieldTexture(GraphicsDevice device) {
-    _fieldTexture = new Texture2D(device, _fieldSize, _fieldSize);
+  private void CreateFieldTexture() {
+    _fieldTexture = new Texture2D(BattleshipGame.Instance.GraphicsDevice, _fieldSize, _fieldSize);
     Color[] data = new Color[_fieldSize * _fieldSize];
     for (int i = 0; i < _fieldSize * _fieldSize; i++) {
       data[i] = Color.White;

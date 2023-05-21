@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Battleships;
 
 public class Match {
-  // From Game class
   private SpriteBatch _batch;
 
   private Grid _playerGrid;
@@ -12,12 +11,10 @@ public class Match {
 
   private MatchState matchState = MatchState.Placement;
 
-  public Match(GraphicsDevice device, SpriteBatch batch) {
-    _batch = batch;
-
-    //
-    _playerGrid = new Grid(device, new Vector2(10, 10), 305, false);
-    _opponentGrid = new Grid(device, new Vector2(335, 10), 450, true);
+  public Match() {
+    _batch = BattleshipGame.Instance.Batch;
+    _playerGrid = new Grid(new Vector2(10, 10), 305, false);
+    _opponentGrid = new Grid(new Vector2(335, 10), 450, true);
   }
 
   public void Update() {
