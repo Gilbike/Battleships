@@ -10,6 +10,8 @@ public class Grid : BaseObject {
   private int _size;
   private bool _encoded;
 
+  public bool Encoded => _encoded;
+
   private int _fieldSize;
   private Texture2D _fieldTexture;
 
@@ -41,7 +43,7 @@ public class Grid : BaseObject {
       for (int col = 0; col < 10; col++) {
         int rowGap = (row - 1) * FieldGap;
         int colGap = (col - 1) * FieldGap;
-        _fields[col + row * 10] = new Field(new Vector2(_position.X + col * _fieldSize + colGap, _position.Y + row * _fieldSize + rowGap), _fieldTexture);
+        _fields[col + row * 10] = new Field(this, new Vector2(_position.X + col * _fieldSize + colGap, _position.Y + row * _fieldSize + rowGap), _fieldTexture);
       }
     }
   }
@@ -86,7 +88,6 @@ public class Grid : BaseObject {
       Vector2[] locations = ship.GetLocations();
       foreach (Vector2 location in locations) {
         int index = GetIndexFromLocationVector(location);
-        System.Console.WriteLine($"placed on grid @{index} with ID {i}");
         _fields[index].State = FieldState.Ship;
         _fields[index].ShipID = i;
       }

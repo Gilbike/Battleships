@@ -13,11 +13,13 @@ public enum FieldState {
 public class Field : BaseObject {
   private Texture2D _texture;
   private Vector2 _position;
+  private Grid _grid;
 
   public FieldState State { get; set; }
   public int ShipID { get; set; }
 
-  public Field(Vector2 position, Texture2D texture) {
+  public Field(Grid grid, Vector2 position, Texture2D texture) {
+    _grid = grid;
     _position = position;
     _texture = texture;
 
@@ -28,7 +30,8 @@ public class Field : BaseObject {
     Color renderColor = Color.White;
     switch (State) {
       case FieldState.Ship:
-        renderColor = Color.GreenYellow;
+        if (!_grid.Encoded)
+          renderColor = Color.GreenYellow;
         break;
       case FieldState.Hit:
         renderColor = Color.Orange;
