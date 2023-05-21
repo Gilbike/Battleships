@@ -42,17 +42,33 @@ public class Grid : BaseObject {
         _fields[col + row * 10] = new Field(new Vector2(_position.X + col * _fieldSize + colGap, _position.Y + row * _fieldSize + rowGap), _fieldTexture);
       }
     }
+  }
 
-    Ship ship = new Ship(3);
-    Vector2[] locations = ship.Place(new Vector2(2, 4), ShipOrientation.Horizontal);
-
-    foreach (Vector2 location in locations) {
-      _fields[GetIndexFromLocationVector(location)].State = FieldState.Ship;
-    }
+  public Field GetField(int index) {
+    return _fields[index];
   }
 
   public int GetIndexFromLocationVector(Vector2 location) {
     return (int)location.Y * 10 + (int)location.X;
+  }
+
+  public Vector4 GetDimensions() {
+    return new Vector4(_position.X, _position.Y, _position.X + _size, _position.Y + _size);
+  }
+
+  public Vector2 GetHoveredField(int x, int y) {
+    for (int row = 0; row < 10; row++) {
+      if (y < 10 + row * _fieldSize + (row - 1) * FieldGap || y > 10 + (row + 1) * _fieldSize + row * FieldGap)
+        continue;
+
+      for (int col = 0; col < 10; col++) {
+        if (x < 10 + col * _fieldSize + (col - 1) * FieldGap || x > 10 + (col + 1) * _fieldSize + col * FieldGap)
+          continue;
+
+        return new Vector2(col, row);
+      }
+    }
+    return new Vector2(-1, -1);
   }
 
   public void Render(SpriteBatch batch) {

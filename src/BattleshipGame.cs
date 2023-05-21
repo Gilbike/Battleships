@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Battleships;
@@ -19,6 +20,7 @@ public class BattleshipGame : Game {
   private SpriteBatch _batch;
 
   public SpriteBatch Batch => _batch;
+  public MouseState mouseState { get; private set; }
 
   private Match currentMatch;
 
@@ -35,6 +37,12 @@ public class BattleshipGame : Game {
     currentMatch = new Match();
 
     base.Initialize();
+  }
+
+  protected override void Update(GameTime gameTime) {
+    mouseState = Mouse.GetState();
+    currentMatch.Update();
+    base.Update(gameTime);
   }
 
   protected override void Draw(GameTime time) {
