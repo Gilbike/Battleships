@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -19,6 +20,8 @@ public class Grid : BaseObject {
   private Field[] _fields = new Field[10 * 10];
 
   private Ship[] _ships = new Ship[5];
+
+  public Action onFleetDestroyed;
 
   public Grid(Vector2 position, int size, bool encoded) {
     _position = position;
@@ -104,7 +107,9 @@ public class Grid : BaseObject {
       attackedField.State = FieldState.Hit;
     else if (attackedField.State == FieldState.Ship) {
       attackedField.State = FieldState.ShipHit;
-      _ships[attackedField.ShipID].Hit();
+      bool shipDied = _ships[attackedField.ShipID].Hit();
+      if (shipDied && !isFleetAlive())
+        onFleetDestroyed?.Invoke();
       return true;
     }
     return false;
@@ -112,6 +117,13 @@ public class Grid : BaseObject {
 
   public bool AttackField(Vector2 location) {
     return AttackField(GetIndexFromLocationVector(location));
+  }
+
+  public bool isFleetAlive() {
+    foreach (Ship ship in _ships) {
+      if (ship.Alive) return true;
+    }
+    return false;
   }
 
   public void Render(SpriteBatch batch) {

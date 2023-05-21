@@ -15,7 +15,7 @@ public class OpponentAI {
   public void Update() { }
 
   public async Task<bool> AttackPlayer() {
-    await Task.Delay(500);
+    await Task.Delay(random.Next(500, 1750));
     int selectedField = random.Next(100);
     bool result = _playerGrid.AttackField(selectedField);
     return await Task.Run<bool>(delegate () {

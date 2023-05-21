@@ -17,10 +17,14 @@ public class Match {
 
   private int OnTurn; // 1 - localplayer, 0 - opponent
 
+  private int loser;
+
   public Match() {
     _batch = BattleshipGame.Instance.Batch;
     _playerGrid = new Grid(new Vector2(10, 10), 305, false);
+    _playerGrid.onFleetDestroyed += delegate () { EndGame(1); };
     _opponentGrid = new Grid(new Vector2(335, 10), 450, true);
+    _opponentGrid.onFleetDestroyed += delegate () { EndGame(0); };
 
     _placer = new ShipPlacer(_playerGrid);
     _placer.StartPlayerPlacement();
@@ -70,14 +74,24 @@ public class Match {
     }
   }
 
+  private void EndGame(int losingSide) {
+    matchState = MatchState.End;
+    loser = losingSide;
+  }
+
   public void Render() {
     _playerGrid.Render(_batch);
-    if (matchState != MatchState.Placement)
+    if (matchState == MatchState.Battle) {
       _opponentGrid.Render(_batch);
+      _batch.DrawString(BattleshipGame.Instance.UIFont, $"{(OnTurn == 1 ? "Player" : "AI")}'s turn", new Vector2(10, 320), Color.Black);
+    } else if (matchState == MatchState.End) {
+      _batch.DrawString(BattleshipGame.Instance.UIFont, $"{(loser == 1 ? "AI" : "Player")} wins", new Vector2(10, 320), Color.Black);
+    }
   }
 }
 
 enum MatchState {
   Placement,
-  Battle
+  Battle,
+  End
 }

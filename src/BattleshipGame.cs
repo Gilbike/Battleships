@@ -23,6 +23,8 @@ public class BattleshipGame : Game {
   public MouseState mouseState { get; private set; }
   public KeyboardState keyboardState { get; private set; }
 
+  public SpriteFont UIFont { get; private set; }
+
   private Match currentMatch;
 
   private BattleshipGame() {
@@ -55,5 +57,10 @@ public class BattleshipGame : Game {
     _batch.End();
 
     base.Draw(time);
+  }
+
+  protected override void LoadContent() {
+    UIFont = Content.Load<SpriteFont>("Content/UIFont");
+    base.LoadContent();
   }
 }

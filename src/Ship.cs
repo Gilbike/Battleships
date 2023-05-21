@@ -12,7 +12,7 @@ public class Ship {
   private bool _placed = false;
 
   public int Size { get; private set; }
-  public bool Alive => hitCount == Size;
+  public bool Alive => hitCount != Size;
 
   private Vector2[] locations;
 
@@ -38,6 +38,6 @@ public class Ship {
 
   public bool Hit() {
     hitCount++;
-    return Alive;
+    return !Alive;
   }
 }
