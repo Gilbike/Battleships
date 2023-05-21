@@ -56,7 +56,7 @@ public class Match {
 
   public void AttackOpponent() {
     Vector2 clickedField = _opponentGrid.GetHoveredField();
-    System.Console.WriteLine(clickedField);
+    bool didHitShip = _opponentGrid.AttackField(clickedField);
   }
 
   public void Render() {

@@ -98,6 +98,22 @@ public class Grid : BaseObject {
     }
   }
 
+  public bool AttackField(int index) {
+    Field attackedField = _fields[index];
+    if (attackedField.State == FieldState.Empty)
+      attackedField.State = FieldState.Hit;
+    else if (attackedField.State == FieldState.Ship) {
+      attackedField.State = FieldState.ShipHit;
+      _ships[attackedField.ShipID].Hit();
+      return true;
+    }
+    return false;
+  }
+
+  public bool AttackField(Vector2 location) {
+    return AttackField(GetIndexFromLocationVector(location));
+  }
+
   public void Render(SpriteBatch batch) {
     foreach (Field field in _fields) {
       field.Render(batch);

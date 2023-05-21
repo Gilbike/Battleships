@@ -35,4 +35,9 @@ public class Ship {
       return new Vector2[0];
     return locations;
   }
+
+  public bool Hit() {
+    hitCount++;
+    return Alive;
+  }
 }
