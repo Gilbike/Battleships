@@ -126,6 +126,31 @@ public class Grid : BaseObject {
     return false;
   }
 
+  public int[] GetNeighbourFields(int index) {
+    int[] neighbours = new int[4] { -1, -1, -1, -1 };
+
+    if (index / 10 != 0) { // not on top border
+      neighbours[0] = (index / 10 - 1) * 10 + index % 10;
+    }
+    if (index % 10 != 9) { // not on right border
+      neighbours[1] = index + 1;
+    }
+    if (index / 10 != 9) { // not on bottom border
+      neighbours[2] = (index / 10 + 1) * 10 + index % 10;
+    }
+    if (index % 10 != 0) { // not on left border
+      neighbours[3] = index - 1;
+    }
+
+    System.Console.WriteLine($"neighbours of {index}: {neighbours[0]} {neighbours[1]} {neighbours[2]} {neighbours[3]}");
+
+    return neighbours;
+  }
+
+  public int[] GetNeighbourFields(Vector2 location) {
+    return GetNeighbourFields(GetIndexFromLocationVector(location));
+  }
+
   public void Render(SpriteBatch batch) {
     foreach (Field field in _fields) {
       field.Render(batch);
