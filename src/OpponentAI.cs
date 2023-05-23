@@ -11,6 +11,7 @@ public class OpponentAI {
 
   private LineAttack lineAttack = new LineAttack();
 
+  private List<int> attackedFields = new List<int>();
   public OpponentAI(Grid playerGrid) {
     random = new Random();
     _playerGrid = playerGrid;
@@ -25,6 +26,9 @@ public class OpponentAI {
 
     int selectedDirection = -1;
 
+    do {
+      selectedField = random.Next(100);
+
     if (_lastResult.successful || lineAttack.enabled) { // select neighbour field when hit successful
       int[] neighbours = _playerGrid.GetNeighbourFields(_lastResult.location);
       if (!lineAttack.enabled || lineAttack.searchingForDirection) {
@@ -38,11 +42,16 @@ public class OpponentAI {
         }
       } else if (lineAttack.enabled && !lineAttack.searchingForDirection) {
         selectedField = neighbours[lineAttack.direction];
+          if (neighbours[selectedDirection] == -1) { // hit border
+            selectedField = random.Next(100);
+            lineAttack = new LineAttack();
       }
     }
+      }
+    } while (attackedFields.IndexOf(selectedField) != -1);
 
-    System.Console.WriteLine("attacking : " + selectedField);
     result = _playerGrid.AttackField(selectedField);
+    attackedFields.Add(selectedField);
 
     if (_lastResult.successful && !result) { // last one was successful but this one was not
       if (lineAttack.enabled) {
