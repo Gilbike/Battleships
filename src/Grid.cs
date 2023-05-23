@@ -142,8 +142,6 @@ public class Grid : BaseObject {
       neighbours[3] = index - 1;
     }
 
-    System.Console.WriteLine($"neighbours of {index}: {neighbours[0]} {neighbours[1]} {neighbours[2]} {neighbours[3]}");
-
     return neighbours;
   }
 
