@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
@@ -29,7 +30,7 @@ public class ShipPlacer {
 
   public void PlaceRandom() {
     Random random = new Random();
-    foreach (int size in SHIPS) {
+    foreach (int size in SHIPS.OrderBy(x => random.Next()).ToList()) {
       Vector2[] proposedLocations;
       Ship ship;
       do {
