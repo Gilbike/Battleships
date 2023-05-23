@@ -11,6 +11,7 @@ public class ShipPlacer {
 
   private Grid _grid;
 
+  // for player placement
   private List<int> unplacedShips;
   private int unplacedShipIndex = 0;
   private Ship currentShip;
@@ -18,6 +19,10 @@ public class ShipPlacer {
   private ShipOrientation orientation = ShipOrientation.Horizontal;
 
   public Action onPlacementDone;
+
+  // for ai placement
+  private bool leftSideBig = false;
+  private bool rightSideBig = false;
 
   public ShipPlacer(Grid grid) {
     _grid = grid;
@@ -35,9 +40,30 @@ public class ShipPlacer {
       Ship ship;
       do {
         int startField = random.Next(100);
-        ShipOrientation shipOrientation = (ShipOrientation)Math.Round(random.Next(1, 101) / (double)100);
+        Vector2 placeLocation = _grid.GetLocationVectorFromIndex(startField);
+
+        if (size > 3) {
+          bool tryLeftSide = random.Next(100) > 50 ? true : false;
+          if (tryLeftSide && !leftSideBig) {
+            System.Console.WriteLine("left " + size);
+            leftSideBig = true;
+            placeLocation.X = random.Next(5, 10);
+          } else {
+            if (!rightSideBig) {
+              System.Console.WriteLine("right " + size);
+              rightSideBig = true;
+              placeLocation.X = random.Next(0, 5);
+            } else {
+              System.Console.WriteLine("left " + size);
+              leftSideBig = true;
+              placeLocation.X = random.Next(5, 10);
+            }
+          }
+        }
+
+        ShipOrientation shipOrientation = (ShipOrientation)random.Next(2);
         ship = new Ship(size);
-        proposedLocations = ship.Place(_grid.GetLocationVectorFromIndex(startField), shipOrientation);
+        proposedLocations = ship.Place(placeLocation, shipOrientation);
       } while (!isPlacementValid(proposedLocations));
       _grid.PlaceShip(ship);
     }
