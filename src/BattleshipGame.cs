@@ -60,7 +60,7 @@ public class BattleshipGame : Game {
   }
 
   protected override void LoadContent() {
-    UIFont = Content.Load<SpriteFont>("Content/UIFont");
+    UIFont = Content.Load<SpriteFont>("Content/fonts/UI");
     base.LoadContent();
   }
 }

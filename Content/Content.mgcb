@@ -13,10 +13,10 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin UIFont.spritefont
+#begin fonts/UI.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:UIFont.spritefont
+/processorParam:TextureFormat=DxtCompressed
+/build:fonts/UI.spritefont
 
