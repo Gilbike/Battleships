@@ -45,16 +45,13 @@ public class ShipPlacer {
         if (size > 3) {
           bool tryLeftSide = random.Next(100) > 50 ? true : false;
           if (tryLeftSide && !leftSideBig) {
-            System.Console.WriteLine("left " + size);
             leftSideBig = true;
             placeLocation.X = random.Next(5, 10);
           } else {
             if (!rightSideBig) {
-              System.Console.WriteLine("right " + size);
               rightSideBig = true;
               placeLocation.X = random.Next(0, 5);
             } else {
-              System.Console.WriteLine("left " + size);
               leftSideBig = true;
               placeLocation.X = random.Next(5, 10);
             }

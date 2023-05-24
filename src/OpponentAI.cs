@@ -42,7 +42,6 @@ public class OpponentAI {
           }
         }
       }
-      System.Console.WriteLine("quarter " + i + " got " + quarter + " attacks");
       quarters[i] = quarter;
     }
   }
@@ -92,7 +91,6 @@ public class OpponentAI {
       selectedField = _playerGrid.GetIndexFromLocationVector(new Vector2(random.Next(minCol, maxCol), random.Next(minRow, maxRow)));
 
       attacksSinceCheck = 0;
-      System.Console.WriteLine("random lagging area " + laggingRegionIndex);
     }
 
     result = _playerGrid.AttackField(selectedField);
@@ -104,17 +102,19 @@ public class OpponentAI {
       } else if (!lineAttack.enabled && selectedDirection != -1) {
         lineAttack.enabled = true;
         lineAttack.searchedDirections[selectedDirection] = true;
-        selectedField = _lastResult.location;
       }
-    } else if (_lastResult.successful && result) {
-      if (!lineAttack.enabled && selectedDirection != -1) {
-        lineAttack.enabled = true;
-        lineAttack.searchingForDirection = false;
-        lineAttack.direction = selectedDirection;
-      } else if (lineAttack.enabled && lineAttack.searchingForDirection) {
-        lineAttack.searchingForDirection = false;
-        lineAttack.direction = selectedDirection;
-      }
+    }
+    if (_lastResult.successful && result && !lineAttack.enabled && selectedDirection != -1) {
+      lineAttack.enabled = true;
+      lineAttack.searchingForDirection = false;
+      lineAttack.direction = selectedDirection;
+    } else if (result && lineAttack.enabled && lineAttack.searchingForDirection) {
+      lineAttack.searchingForDirection = false;
+      lineAttack.direction = selectedDirection;
+    }
+
+    if (lineAttack.enabled && lineAttack.searchingForDirection) {
+      selectedField = _lastResult.location;
     }
 
     _lastResult = new LastAttackResult { location = selectedField, successful = result };
