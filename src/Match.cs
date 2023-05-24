@@ -1,3 +1,5 @@
+using System;
+using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -18,6 +20,8 @@ public class Match {
   private int OnTurn; // 1 - localplayer, 0 - opponent
 
   private int loser;
+
+  public Action OnMatchEnd;
 
   public Match() {
     _batch = BattleshipGame.Instance.Batch;
@@ -74,9 +78,12 @@ public class Match {
     }
   }
 
-  private void EndGame(int losingSide) {
+  private async void EndGame(int losingSide) {
     matchState = MatchState.End;
     loser = losingSide;
+
+    await Task.Delay(2000);
+    OnMatchEnd?.Invoke();
   }
 
   public void Render() {

@@ -37,9 +37,14 @@ public class BattleshipGame : Game {
     _batch = new SpriteBatch(GraphicsDevice);
     Window.Title = "Battleships";
 
-    currentMatch = new Match();
+    StartNewGame();
 
     base.Initialize();
+  }
+
+  private void StartNewGame() {
+    currentMatch = new Match();
+    currentMatch.OnMatchEnd += StartNewGame;
   }
 
   protected override void Update(GameTime gameTime) {
