@@ -21,7 +21,7 @@ public class Match {
 
   private int loser;
 
-  public Action OnMatchEnd;
+  public Action<string> OnMatchEnd;
 
   public Match() {
     _batch = BattleshipGame.Instance.Batch;
@@ -78,12 +78,11 @@ public class Match {
     }
   }
 
-  private async void EndGame(int losingSide) {
+  private void EndGame(int losingSide) {
     matchState = MatchState.End;
     loser = losingSide;
 
-    await Task.Delay(2000);
-    OnMatchEnd?.Invoke();
+    OnMatchEnd?.Invoke((loser == 1 ? "AI" : "Player"));
   }
 
   public void Render() {

@@ -45,13 +45,20 @@ public class BattleshipGame : Game {
 
   private void StartNewGame() {
     currentMatch = new Match();
-    currentMatch.OnMatchEnd += StartNewGame;
+    currentMatch.OnMatchEnd += OnGameEnded;
+  }
+
+  private void OnGameEnded(string winner) {
+    EndScreen.SetText($"{winner} wins!");
+    currentMatch = null;
   }
 
   protected override void Update(GameTime gameTime) {
     mouseState = Mouse.GetState();
     keyboardState = Keyboard.GetState();
-    currentMatch.Update();
+    if (currentMatch != null) {
+      currentMatch.Update();
+    }
     base.Update(gameTime);
   }
 
@@ -59,7 +66,11 @@ public class BattleshipGame : Game {
     GraphicsDevice.Clear(Color.CornflowerBlue);
 
     _batch.Begin();
-    currentMatch.Render();
+    if (currentMatch != null) {
+      currentMatch.Render();
+    } else {
+      EndScreen.Render();
+    }
     _batch.End();
 
     base.Draw(time);
