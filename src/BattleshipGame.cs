@@ -36,6 +36,7 @@ public class BattleshipGame : Game {
   protected override void Initialize() {
     _batch = new SpriteBatch(GraphicsDevice);
     Window.Title = "Battleships";
+    EndScreen.Initialize();
 
     StartNewGame();
 
@@ -66,6 +67,7 @@ public class BattleshipGame : Game {
 
   protected override void LoadContent() {
     UIFont = Content.Load<SpriteFont>("Content/fonts/UI");
+    EndScreen.LoadContent();
     base.LoadContent();
   }
 }
