@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -27,6 +28,9 @@ public static class EndScreen {
 
   private static Vector2 restartTextSize;
   private static Vector2 exitTextSize;
+
+  public static Action OnRestartClick;
+  public static Action OnQuitClick;
 
   public static void Initialize() {
     rectangle = new Texture2D(BattleshipGame.Instance.GraphicsDevice, 1, 1);
@@ -65,9 +69,9 @@ public static class EndScreen {
     MouseState state = BattleshipGame.Instance.mouseState;
     if (state.LeftButton == ButtonState.Pressed && !leftClicked) {
       if (isInRect(restartButtonPosition, restartButtonSize)) {
-        System.Console.WriteLine("restart");
+        OnRestartClick?.Invoke();
       } else if (isInRect(exitButtonPosition, exitButtonSize)) {
-        System.Console.WriteLine("exit");
+        OnQuitClick?.Invoke();
       }
       leftClicked = true;
     } else if (state.LeftButton == ButtonState.Released && leftClicked) {

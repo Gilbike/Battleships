@@ -37,6 +37,8 @@ public class BattleshipGame : Game {
     _batch = new SpriteBatch(GraphicsDevice);
     Window.Title = "Battleships";
     EndScreen.Initialize();
+    EndScreen.OnRestartClick += OnRestartClick;
+    EndScreen.OnQuitClick += OnQuitClick;
 
     StartNewGame();
 
@@ -51,6 +53,14 @@ public class BattleshipGame : Game {
   private void OnGameEnded(string winner) {
     EndScreen.SetText($"{winner} wins!");
     currentMatch = null;
+  }
+
+  private void OnRestartClick() {
+    StartNewGame();
+  }
+
+  private void OnQuitClick() {
+    Exit();
   }
 
   protected override void Update(GameTime gameTime) {
