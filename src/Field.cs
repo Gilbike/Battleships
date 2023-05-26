@@ -8,6 +8,7 @@ public enum FieldState {
   Ship,
   Hit,
   ShipHit,
+  ShipSunk,
 }
 
 public class Field : BaseObject {
@@ -38,6 +39,9 @@ public class Field : BaseObject {
         break;
       case FieldState.ShipHit:
         renderColor = Color.Red;
+        break;
+      case FieldState.ShipSunk:
+        renderColor = Color.OrangeRed;
         break;
     }
     batch.Draw(_texture, _position, renderColor);
