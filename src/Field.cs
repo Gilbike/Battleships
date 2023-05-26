@@ -41,7 +41,7 @@ public class Field : BaseObject {
         renderColor = Color.Red;
         break;
       case FieldState.ShipSunk:
-        renderColor = Color.OrangeRed;
+        renderColor = Color.RosyBrown;
         break;
     }
     batch.Draw(_texture, _position, renderColor);
