@@ -58,6 +58,8 @@ public class BattleshipGame : Game {
     keyboardState = Keyboard.GetState();
     if (currentMatch != null) {
       currentMatch.Update();
+    } else {
+      EndScreen.Update();
     }
     base.Update(gameTime);
   }

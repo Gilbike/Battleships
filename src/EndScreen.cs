@@ -20,6 +20,11 @@ public static class EndScreen {
   private static string displayText;
   private static Vector2 displayTextLocation;
 
+  private static Vector2 restartButtonPosition;
+  private static Vector2 restartButtonSize;
+  private static Vector2 exitButtonPosition;
+  private static Vector2 exitButtonSize;
+
   private static Vector2 restartTextSize;
   private static Vector2 exitTextSize;
 
@@ -30,6 +35,12 @@ public static class EndScreen {
 
     fullScreenScale = new Vector2(BattleshipGame.Instance.GraphicsDevice.Viewport.Width, BattleshipGame.Instance.GraphicsDevice.Viewport.Height);
     screenCenter = new Vector2(fullScreenScale.X / 2, fullScreenScale.Y / 2);
+
+    restartButtonPosition = new Vector2(screenCenter.X - 100, screenCenter.Y + 60);
+    restartButtonSize = new Vector2(200, 40);
+
+    exitButtonPosition = new Vector2(screenCenter.X - 100, screenCenter.Y + 110);
+    exitButtonSize = new Vector2(200, 40);
   }
 
   public static void LoadContent() {
@@ -49,14 +60,27 @@ public static class EndScreen {
     return (state.X >= location.X && state.X <= location.X + size.X && state.Y >= location.Y && state.Y <= location.Y + size.Y);
   }
 
+  private static bool leftClicked = false;
+  public static void Update() {
+    MouseState state = BattleshipGame.Instance.mouseState;
+    if (state.LeftButton == ButtonState.Pressed && !leftClicked) {
+      if (isInRect(restartButtonPosition, restartButtonSize)) {
+        System.Console.WriteLine("restart");
+      } else if (isInRect(exitButtonPosition, exitButtonSize)) {
+        System.Console.WriteLine("exit");
+      }
+      leftClicked = true;
+    } else if (state.LeftButton == ButtonState.Released && leftClicked) {
+      leftClicked = false;
+    }
+  }
+
   public static void Render() {
     BattleshipGame.Instance.Batch.Draw(rectangle, Vector2.Zero, null, backgroundColor, 0f, Vector2.Zero, fullScreenScale, SpriteEffects.None, 1f);
     BattleshipGame.Instance.Batch.DrawString(font, displayText, displayTextLocation, Color.White);
 
     {
       // Restart button
-      Vector2 restartButtonPosition = new Vector2(screenCenter.X - 100, screenCenter.Y + 60);
-      Vector2 restartButtonSize = new Vector2(200, 40);
       Color restartDrawColor = restartButtonColor;
       if (isInRect(restartButtonPosition, restartButtonSize)) {
         restartDrawColor = restartButtonColorHover;
@@ -67,8 +91,6 @@ public static class EndScreen {
 
     {
       // Exit button
-      Vector2 exitButtonPosition = new Vector2(screenCenter.X - 100, screenCenter.Y + 110);
-      Vector2 exitButtonSize = new Vector2(200, 40);
       Color exitDrawColor = quitButtonColor;
       if (isInRect(exitButtonPosition, exitButtonSize)) {
         exitDrawColor = quitButtonColorHover;
