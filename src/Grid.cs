@@ -107,8 +107,14 @@ public class Grid : BaseObject {
     else if (attackedField.State == FieldState.Ship) {
       attackedField.State = FieldState.ShipHit;
       bool shipDied = _ships[attackedField.ShipID].Hit();
-      if (shipDied && !isFleetAlive())
-        onFleetDestroyed?.Invoke();
+      if (shipDied) {
+        foreach (Vector2 location in _ships[attackedField.ShipID].GetLocations()) {
+          _fields[GetIndexFromLocationVector(location)].State = FieldState.ShipSunk;
+        }
+        if (!isFleetAlive()) {
+          onFleetDestroyed?.Invoke();
+        }
+      }
       return true;
     }
     return false;
