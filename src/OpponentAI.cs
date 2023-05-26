@@ -60,13 +60,21 @@ public class OpponentAI {
       if (_lastResult.successful || lineAttack.enabled) { // select neighbour field when hit successful
         int[] neighbours = _playerGrid.GetNeighbourFields(_lastResult.location);
         if (!lineAttack.enabled || lineAttack.searchingForDirection) {
+          int tries = 0;
           do {
             selectedDirection = random.Next(neighbours.Length);
-          } while (neighbours[selectedDirection] == -1);
+            tries++;
+          } while (neighbours[selectedDirection] == -1 && tries < 6);
           selectedField = neighbours[selectedDirection];
           if (neighbours[selectedDirection] == -1) { // hit border
             selectedField = random.Next(100);
             lineAttack = new LineAttack();
+          }
+          if (tries > 5) {
+            selectedField = random.Next(100);
+            if (lineAttack.enabled) {
+              lineAttack = new LineAttack();
+            }
           }
         } else if (lineAttack.enabled && !lineAttack.searchingForDirection) {
           selectedField = neighbours[lineAttack.direction];
