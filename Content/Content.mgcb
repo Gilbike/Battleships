@@ -26,3 +26,9 @@
 /processorParam:Quality=Best
 /build:sounds/deploy.mp3
 
+#begin sounds/fire.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/fire.mp3
+

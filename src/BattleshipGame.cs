@@ -94,6 +94,7 @@ public class BattleshipGame : Game {
   protected override void LoadContent() {
     UIFont = Content.Load<SpriteFont>("Content/fonts/UI");
     SoundEffects.Add("deploy", Content.Load<SoundEffect>("Content/sounds/deploy"));
+    SoundEffects.Add("fire", Content.Load<SoundEffect>("Content/sounds/fire"));
     EndScreen.LoadContent();
     base.LoadContent();
   }

@@ -68,6 +68,7 @@ public class Match {
   public async void AttackOpponent() {
     Vector2 clickedField = _opponentGrid.GetHoveredField();
     bool didHitShip = _opponentGrid.AttackField(clickedField);
+    BattleshipGame.Instance.SoundEffects["fire"].Play();
     if (!didHitShip) {
       OnTurn = 0;
       bool didHitPlayer = false;
