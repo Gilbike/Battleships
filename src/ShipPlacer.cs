@@ -145,6 +145,7 @@ public class ShipPlacer {
         currentShip = null;
         return;
       }
+      BattleshipGame.Instance.SoundEffects["deploy"].Play();
       _grid.PlaceShip(currentShip);
       unplacedShipIndex = 0;
       currentShip = new Ship(unplacedShips[unplacedShipIndex]);

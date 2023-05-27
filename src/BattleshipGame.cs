@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework.Audio;
 
 namespace Battleships;
 
@@ -24,6 +26,7 @@ public class BattleshipGame : Game {
   public KeyboardState keyboardState { get; private set; }
 
   public SpriteFont UIFont { get; private set; }
+  public Dictionary<string, SoundEffect> SoundEffects = new Dictionary<string, SoundEffect>();
 
   private Match currentMatch;
 
@@ -90,6 +93,7 @@ public class BattleshipGame : Game {
 
   protected override void LoadContent() {
     UIFont = Content.Load<SpriteFont>("Content/fonts/UI");
+    SoundEffects.Add("deploy", Content.Load<SoundEffect>("Content/sounds/deploy"));
     EndScreen.LoadContent();
     base.LoadContent();
   }
