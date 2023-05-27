@@ -11,6 +11,14 @@ public enum FieldState {
   ShipSunk,
 }
 
+static class FieldColors {
+  public static Color BaseColor = new Color(21, 152, 149);
+  public static Color ShipColor = new Color(237, 237, 237);
+  public static Color MissColor = new Color(232, 170, 66);
+  public static Color HitColor = new Color(244, 80, 80);
+  public static Color SunkColor = new Color(94, 59, 77);
+}
+
 public class Field : BaseObject {
   private Texture2D _texture;
   private Vector2 _position;
@@ -28,20 +36,20 @@ public class Field : BaseObject {
   }
 
   public void Render(SpriteBatch batch) {
-    Color renderColor = Color.White;
+    Color renderColor = FieldColors.BaseColor;
     switch (State) {
       case FieldState.Ship:
         if (!_grid.Encoded)
-          renderColor = Color.GreenYellow;
+          renderColor = FieldColors.ShipColor;
         break;
       case FieldState.Hit:
-        renderColor = Color.Orange;
+        renderColor = FieldColors.MissColor;
         break;
       case FieldState.ShipHit:
-        renderColor = Color.Red;
+        renderColor = FieldColors.HitColor;
         break;
       case FieldState.ShipSunk:
-        renderColor = Color.RosyBrown;
+        renderColor = FieldColors.SunkColor;
         break;
     }
     batch.Draw(_texture, _position, renderColor);

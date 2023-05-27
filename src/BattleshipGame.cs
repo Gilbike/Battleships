@@ -9,6 +9,8 @@ namespace Battleships;
 public class BattleshipGame : Game {
   private static BattleshipGame _instance;
 
+  private Color bgColor = new Color(60, 72, 107);
+
   public static BattleshipGame Instance {
     get {
       if (_instance == null) {
@@ -78,7 +80,7 @@ public class BattleshipGame : Game {
   }
 
   protected override void Draw(GameTime time) {
-    GraphicsDevice.Clear(Color.CornflowerBlue);
+    GraphicsDevice.Clear(bgColor);
 
     _batch.Begin();
     if (currentMatch != null) {
