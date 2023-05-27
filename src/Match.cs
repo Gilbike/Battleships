@@ -90,9 +90,7 @@ public class Match {
     _playerGrid.Render(_batch);
     if (matchState == MatchState.Battle) {
       _opponentGrid.Render(_batch);
-      _batch.DrawString(BattleshipGame.Instance.UIFont, $"{(OnTurn == 1 ? "Player" : "AI")}'s turn", new Vector2(10, 320), Color.Black);
-    } else if (matchState == MatchState.End) {
-      _batch.DrawString(BattleshipGame.Instance.UIFont, $"{(loser == 1 ? "AI" : "Player")} wins", new Vector2(10, 320), Color.Black);
+      _batch.DrawString(BattleshipGame.Instance.UIFont, $"{(OnTurn == 1 ? "Player" : "AI")}'s turn", new Vector2(10, 320), Color.White);
     }
   }
 }
