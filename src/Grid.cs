@@ -5,8 +5,6 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Battleships;
 
 public class Grid : BaseObject {
-  private const int FieldGap = 2;
-
   private Vector2 _position;
   private int _size;
   private bool _encoded;
@@ -22,11 +20,13 @@ public class Grid : BaseObject {
 
   public Action onFleetDestroyed;
 
+  public int FieldSize => _fieldSize;
+
   public Grid(Vector2 position, int size, bool encoded) {
     _position = position;
     _size = size;
     _encoded = encoded;
-    _fieldSize = (size - (FieldGap - 1) * 10) / 10;
+    _fieldSize = size / 10;
 
     CreateFieldTexture();
     CreateFields();
@@ -44,9 +44,7 @@ public class Grid : BaseObject {
   private void CreateFields() {
     for (int row = 0; row < 10; row++) {
       for (int col = 0; col < 10; col++) {
-        int rowGap = (row - 1) * FieldGap;
-        int colGap = (col - 1) * FieldGap;
-        _fields[col + row * 10] = new Field(this, new Vector2(_position.X + col * _fieldSize + colGap, _position.Y + row * _fieldSize + rowGap), _fieldTexture);
+        _fields[col + row * 10] = new Field(this, new Vector2(_position.X + col * _fieldSize, _position.Y + row * _fieldSize), _fieldTexture);
       }
     }
   }
@@ -71,11 +69,11 @@ public class Grid : BaseObject {
     int x = BattleshipGame.Instance.mouseState.X;
     int y = BattleshipGame.Instance.mouseState.Y;
     for (int row = 0; row < 10; row++) {
-      if (y < _position.Y + row * _fieldSize + (row - 1) * FieldGap || y > _position.Y + (row + 1) * _fieldSize + row * FieldGap)
+      if (y < _position.Y + row * _fieldSize || y > _position.Y + (row + 1) * _fieldSize)
         continue;
 
       for (int col = 0; col < 10; col++) {
-        if (x < _position.X + col * _fieldSize + (col - 1) * FieldGap || x > _position.X + (col + 1) * _fieldSize + col * FieldGap)
+        if (x < _position.X + col * _fieldSize || x > _position.X + (col + 1) * _fieldSize)
           continue;
 
         return new Vector2(col, row);
