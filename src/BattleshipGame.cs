@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Audio;
+using System;
 
 namespace Battleships;
 
@@ -10,6 +11,7 @@ public class BattleshipGame : Game {
   private static BattleshipGame _instance;
 
   private Color bgColor = new Color(60, 72, 107);
+  private Random random = new Random();
 
   public static BattleshipGame Instance {
     get {
@@ -29,6 +31,7 @@ public class BattleshipGame : Game {
 
   public SpriteFont UIFont { get; private set; }
   public Dictionary<string, SoundEffect> SoundEffects = new Dictionary<string, SoundEffect>();
+  private List<Texture2D> oceanTiles = new List<Texture2D>();
 
   private Match currentMatch;
 
@@ -97,7 +100,14 @@ public class BattleshipGame : Game {
     UIFont = Content.Load<SpriteFont>("Content/fonts/UI");
     SoundEffects.Add("deploy", Content.Load<SoundEffect>("Content/sounds/deploy"));
     SoundEffects.Add("fire", Content.Load<SoundEffect>("Content/sounds/fire"));
+    oceanTiles.Add(Content.Load<Texture2D>("Content/sprites/ocean1"));
+    oceanTiles.Add(Content.Load<Texture2D>("Content/sprites/ocean2"));
+    oceanTiles.Add(Content.Load<Texture2D>("Content/sprites/ocean3"));
     EndScreen.LoadContent();
     base.LoadContent();
+  }
+
+  public Texture2D GetRandomOceanTile() {
+    return oceanTiles[random.Next(oceanTiles.Count)];
   }
 }
