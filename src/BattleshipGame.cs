@@ -87,7 +87,7 @@ public class BattleshipGame : Game {
   protected override void Draw(GameTime time) {
     GraphicsDevice.Clear(bgColor);
 
-    _batch.Begin();
+    _batch.Begin(samplerState: SamplerState.PointClamp);
     if (currentMatch != null) {
       currentMatch.Render();
     } else {
