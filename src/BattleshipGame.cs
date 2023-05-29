@@ -42,6 +42,8 @@ public class BattleshipGame : Game {
   }
 
   protected override void Initialize() {
+    LoadResources();
+
     _batch = new SpriteBatch(GraphicsDevice);
     Window.Title = "Battleships";
     EndScreen.Initialize();
@@ -96,7 +98,7 @@ public class BattleshipGame : Game {
     base.Draw(time);
   }
 
-  protected override void LoadContent() {
+  private void LoadResources() {
     UIFont = Content.Load<SpriteFont>("Content/fonts/UI");
     SoundEffects.Add("deploy", Content.Load<SoundEffect>("Content/sounds/deploy"));
     SoundEffects.Add("fire", Content.Load<SoundEffect>("Content/sounds/fire"));
@@ -104,10 +106,9 @@ public class BattleshipGame : Game {
     oceanTiles.Add(Content.Load<Texture2D>("Content/sprites/ocean2"));
     oceanTiles.Add(Content.Load<Texture2D>("Content/sprites/ocean3"));
     EndScreen.LoadContent();
-    base.LoadContent();
   }
 
   public Texture2D GetRandomOceanTile() {
-    return oceanTiles[random.Next(oceanTiles.Count)];
+    return oceanTiles[random.Next(3)];
   }
 }
