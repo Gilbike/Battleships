@@ -30,29 +30,13 @@ public class Field : BaseObject {
   public Field(Grid grid, Vector2 position, Texture2D texture) {
     _grid = grid;
     _position = position;
-    _texture = texture;
+    _texture = BattleshipGame.Instance.GetRandomOceanTile();
 
     State = FieldState.Empty;
   }
 
   public void Render(SpriteBatch batch) {
-    Color renderColor = FieldColors.BaseColor;
-    switch (State) {
-      case FieldState.Ship:
-        if (!_grid.Encoded)
-          renderColor = FieldColors.ShipColor;
-        break;
-      case FieldState.Hit:
-        renderColor = FieldColors.MissColor;
-        break;
-      case FieldState.ShipHit:
-        renderColor = FieldColors.HitColor;
-        break;
-      case FieldState.ShipSunk:
-        renderColor = FieldColors.SunkColor;
-        break;
-    }
-    batch.Draw(_texture, _position, renderColor);
+    batch.Draw(_texture, _position, null, Color.White, 0f, Vector2.Zero, new Vector2((float)_grid.FieldSize / _texture.Width), SpriteEffects.None, 0f);
   }
 
   public void Update() { }

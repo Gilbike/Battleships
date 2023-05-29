@@ -109,6 +109,6 @@ public class BattleshipGame : Game {
   }
 
   public Texture2D GetRandomOceanTile() {
-    return oceanTiles[random.Next(3)];
+    return oceanTiles[random.Next(oceanTiles.Count)];
   }
 }
