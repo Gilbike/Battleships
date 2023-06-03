@@ -33,6 +33,7 @@ public class BattleshipGame : Game {
   public Dictionary<string, SoundEffect> SoundEffects = new Dictionary<string, SoundEffect>();
   private List<Texture2D> oceanTiles = new List<Texture2D>();
   public Texture2D ShipBody;
+  public Texture2D ShipFront;
 
   private Match currentMatch;
 
@@ -107,6 +108,7 @@ public class BattleshipGame : Game {
     oceanTiles.Add(Content.Load<Texture2D>("Content/sprites/ocean2"));
     oceanTiles.Add(Content.Load<Texture2D>("Content/sprites/ocean3"));
     ShipBody = Content.Load<Texture2D>("Content/sprites/shipbody");
+    ShipFront = Content.Load<Texture2D>("Content/sprites/shipfront");
     EndScreen.LoadContent();
   }
 

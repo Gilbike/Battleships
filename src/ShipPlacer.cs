@@ -36,9 +36,10 @@ public class ShipPlacer {
   public void PlaceRandom() {
     Random random = new Random();
     foreach (int size in SHIPS.OrderBy(x => random.Next()).ToList()) {
-      Vector2[] proposedLocations;
+      List<Vector2> proposedLocations = new List<Vector2>();
       Ship ship;
       do {
+        proposedLocations.Clear();
         int startField = random.Next(100);
         Vector2 placeLocation = _grid.GetLocationVectorFromIndex(startField);
 
@@ -60,8 +61,8 @@ public class ShipPlacer {
 
         ShipOrientation shipOrientation = (ShipOrientation)random.Next(2);
         ship = new Ship(size);
-        proposedLocations = ship.Place(placeLocation, shipOrientation);
-      } while (!isPlacementValid(proposedLocations));
+        ship.Place(placeLocation, shipOrientation).ToList().ForEach(part => proposedLocations.Add(part.location));
+      } while (!isPlacementValid(proposedLocations.ToArray()));
       _grid.PlaceShip(ship);
     }
   }
@@ -95,12 +96,12 @@ public class ShipPlacer {
     if (lastWheelValue > mState.ScrollWheelValue && unplacedShipIndex + 1 < unplacedShips.Count) {
       unplacedShipIndex += 1;
       foreach (Field field in lastFields)
-        field.State = FieldState.Empty;
+        field.Part = null;
       currentShip = new Ship(unplacedShips[unplacedShipIndex]);
     } else if (lastWheelValue < mState.ScrollWheelValue && unplacedShipIndex > 0) {
       unplacedShipIndex -= 1;
       foreach (Field field in lastFields)
-        field.State = FieldState.Empty;
+        field.Part = null;
       currentShip = new Ship(unplacedShips[unplacedShipIndex]);
     }
     lastWheelValue = mState.ScrollWheelValue;
@@ -115,22 +116,22 @@ public class ShipPlacer {
 
     // Set held ship location
     foreach (Field field in lastFields)
-      field.State = FieldState.Empty;
+      field.Part = null;
     lastFields.Clear();
 
     Vector2 baseLocation = _grid.GetHoveredField();
     if (baseLocation == new Vector2(-1, -1)) return;
-    Vector2[] shipLocations = currentShip.Place(baseLocation, orientation);
-    foreach (Vector2 location in shipLocations) {
-      if (location.X > 9 || location.Y > 9) { // outside of grid
+    ShipPart[] shipLocations = currentShip.Place(baseLocation, orientation);
+    foreach (ShipPart part in shipLocations) {
+      if (part.location.X > 9 || part.location.Y > 9) { // outside of grid
         isPlacementValid = false;
         continue;
       }
-      Field field = _grid.GetField(_grid.GetIndexFromLocationVector(location));
-      if (field.State == FieldState.Ship) {
+      Field field = _grid.GetField(_grid.GetIndexFromLocationVector(part.location));
+      if (field.Part != null) {
         isPlacementValid = false;
       } else {
-        field.State = FieldState.Ship;
+        field.Part = part;
         lastFields.Add(field);
       }
     }
