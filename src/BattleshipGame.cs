@@ -71,6 +71,7 @@ public class BattleshipGame : Game {
   protected override void Update(GameTime gameTime) {
     mouseState = Mouse.GetState();
     keyboardState = Keyboard.GetState();
+    Input.Update(Mouse.GetState());
     if (currentMatch != null) {
       currentMatch.Update();
     } else {
