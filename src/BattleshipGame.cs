@@ -56,12 +56,13 @@ public class BattleshipGame : Game {
   }
 
   private void OnGameEnded(string winner) {
-    EndScreen.SetText($"{winner} wins!");
+    EndScreen.Enable($"{winner} wins!");
     currentMatch = null;
   }
 
   private void OnRestartClick() {
     StartNewGame();
+    EndScreen.Disable();
   }
 
   private void OnQuitClick() {
@@ -74,8 +75,6 @@ public class BattleshipGame : Game {
     Input.Update(Mouse.GetState());
     if (currentMatch != null) {
       currentMatch.Update();
-    } else {
-      EndScreen.Update();
     }
     base.Update(gameTime);
   }

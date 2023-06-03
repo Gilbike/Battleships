@@ -53,29 +53,26 @@ public static class EndScreen {
     exitTextSize = font.MeasureString("Exit");
   }
 
-  public static void SetText(string text) {
+  public static void Enable(string text) {
     displayText = text;
     Vector2 size = font.MeasureString(text);
     displayTextLocation = new Vector2(screenCenter.X - size.X / 2, screenCenter.Y - size.Y / 2);
+    Input.OnLeftMouseClicked += OnClick;
   }
 
-  private static bool isInRect(Vector2 location, Vector2 size) {
-    MouseState state = BattleshipGame.Instance.mouseState;
-    return (state.X >= location.X && state.X <= location.X + size.X && state.Y >= location.Y && state.Y <= location.Y + size.Y);
+  public static void Disable() {
+    Input.OnLeftMouseClicked -= OnClick;
   }
 
-  private static bool leftClicked = false;
-  public static void Update() {
-    MouseState state = BattleshipGame.Instance.mouseState;
-    if (state.LeftButton == ButtonState.Pressed && !leftClicked) {
-      if (isInRect(restartButtonPosition, restartButtonSize)) {
-        OnRestartClick?.Invoke();
-      } else if (isInRect(exitButtonPosition, exitButtonSize)) {
-        OnQuitClick?.Invoke();
-      }
-      leftClicked = true;
-    } else if (state.LeftButton == ButtonState.Released && leftClicked) {
-      leftClicked = false;
+  private static bool isInRect(float x, float y, Vector2 location, Vector2 size) {
+    return (x >= location.X && x <= location.X + size.X && y >= location.Y && y <= location.Y + size.Y);
+  }
+
+  private static void OnClick(float x, float y) {
+    if (isInRect(x, y, restartButtonPosition, restartButtonSize)) {
+      OnRestartClick?.Invoke();
+    } else if (isInRect(x, y, exitButtonPosition, exitButtonSize)) {
+      OnQuitClick?.Invoke();
     }
   }
 
@@ -86,9 +83,9 @@ public static class EndScreen {
     {
       // Restart button
       Color restartDrawColor = restartButtonColor;
-      if (isInRect(restartButtonPosition, restartButtonSize)) {
-        restartDrawColor = restartButtonColorHover;
-      }
+      // if (isInRect(restartButtonPosition, restartButtonSize)) {
+      //   restartDrawColor = restartButtonColorHover;
+      // }
       BattleshipGame.Instance.Batch.Draw(rectangle, restartButtonPosition, null, restartDrawColor, 0, Vector2.Zero, restartButtonSize, SpriteEffects.None, 0);
       BattleshipGame.Instance.Batch.DrawString(font, "New Game", new Vector2(restartButtonPosition.X + restartButtonSize.X / 2 - restartTextSize.X / 2, restartButtonPosition.Y + restartButtonSize.Y / 2 - restartTextSize.Y / 2), Color.White);
     }
@@ -96,9 +93,9 @@ public static class EndScreen {
     {
       // Exit button
       Color exitDrawColor = quitButtonColor;
-      if (isInRect(exitButtonPosition, exitButtonSize)) {
-        exitDrawColor = quitButtonColorHover;
-      }
+      // if (isInRect(exitButtonPosition, exitButtonSize)) {
+      //   exitDrawColor = quitButtonColorHover;
+      // }
       BattleshipGame.Instance.Batch.Draw(rectangle, exitButtonPosition, null, exitDrawColor, 0, Vector2.Zero, exitButtonSize, SpriteEffects.None, 0);
       BattleshipGame.Instance.Batch.DrawString(font, "Exit", new Vector2(exitButtonPosition.X + exitButtonSize.X / 2 - exitTextSize.X / 2, exitButtonPosition.Y + exitButtonSize.Y / 2 - exitTextSize.Y / 2), Color.White);
     }
