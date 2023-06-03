@@ -100,14 +100,15 @@ public class Grid : BaseObject {
 
   public bool AttackField(int index) {
     Field attackedField = _fields[index];
-    if (attackedField.State == FieldState.Empty)
-      attackedField.State = FieldState.Hit;
-    else if (attackedField.State == FieldState.Ship) {
-      attackedField.State = FieldState.ShipHit;
+    if (attackedField.Part == null) {
+      attackedField.Attacked = true;
+
+    } else if (attackedField.Part != null) {
+      attackedField.Attacked = true;
       bool shipDied = _ships[attackedField.ShipID].Hit();
       if (shipDied) {
         foreach (Vector2 location in _ships[attackedField.ShipID].GetLocations()) {
-          _fields[GetIndexFromLocationVector(location)].State = FieldState.ShipSunk;
+          _fields[GetIndexFromLocationVector(location)].Sunken = true;
         }
         if (!isFleetAlive()) {
           onFleetDestroyed?.Invoke();
