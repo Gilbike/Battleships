@@ -36,6 +36,10 @@ public class Field : BaseObject {
         Vector2 scale = new Vector2((float)(_grid.FieldSize - 5) / _texture.Width);
         Vector2 offset = new Vector2(5f / 2);
         batch.Draw(BattleshipGame.Instance.Fire, _position + new Vector2(8 * scale.X, 8 * scale.Y) + offset, null, Color.White, 0f, new Vector2(8, 8), scale, SpriteEffects.None, 0f);
+      } else if (Attacked && Sunken) {
+        Vector2 scale = new Vector2((float)(_grid.FieldSize - 5) / _texture.Width);
+        Vector2 offset = new Vector2(5f / 2);
+        batch.Draw(BattleshipGame.Instance.Sunken, _position + new Vector2(8 * scale.X, 8 * scale.Y) + offset, null, Color.White, 0f, new Vector2(8, 8), scale, SpriteEffects.None, 0f);
       }
     } else {
       if (Attacked) {
