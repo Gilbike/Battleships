@@ -32,6 +32,18 @@
 /processorParam:Quality=Best
 /build:sounds/fire.mp3
 
+#begin sprites/fire.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:sprites/fire.png
+
 #begin sprites/miss.png
 /importer:TextureImporter
 /processor:TextureProcessor
