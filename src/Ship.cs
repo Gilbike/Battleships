@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,6 +13,13 @@ public enum ShipOrientation {
 
 public class Ship {
   private static Random random = new Random();
+  private static Dictionary<int, int> centerIndexes = new Dictionary<int, int>() {
+    {5, 2},
+    {4, 2},
+    {3, 1},
+    {2, -1}
+  };
+
   private int hitCount = 0;
   private bool _placed = false;
   private bool isFirstFront;
@@ -34,22 +42,25 @@ public class Ship {
       parts[i] = new ShipPart {
         location = location + offset * i,
         texture = BattleshipGame.Instance.ShipBody,
-        rotation = orientation == ShipOrientation.Horizontal ? 90f : 0f
+        rotation = orientation == ShipOrientation.Horizontal ? isFirstFront ? -90f : 90f : isFirstFront ? 0f : 180f
       };
     }
+
+    // set front and back sprite
     if (isFirstFront) {
       parts[0].texture = BattleshipGame.Instance.ShipFront;
-      parts[0].rotation *= -1;
       parts[parts.Length - 1].texture = BattleshipGame.Instance.ShipBack;
-      parts[parts.Length - 1].rotation *= -1;
     } else {
       parts[parts.Length - 1].texture = BattleshipGame.Instance.ShipFront;
       parts[0].texture = BattleshipGame.Instance.ShipBack;
-      if (orientation == ShipOrientation.Vertical) {
-        parts[parts.Length - 1].rotation = 180f;
-        parts[0].rotation = 180f;
-      }
     }
+
+    // set command center sprite
+    if (centerIndexes[Size] != -1) {
+      int index = isFirstFront ? centerIndexes[Size] : (Size - 1) - centerIndexes[Size];
+      parts[index].texture = BattleshipGame.Instance.ShipCenter;
+    }
+
     return parts;
   }
 
