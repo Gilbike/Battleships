@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using Battleships.Resources;
 
 namespace Battleships;
 
@@ -157,7 +158,7 @@ public class ShipPlacer {
         currentShip = null;
         return;
       }
-      BattleshipGame.Instance.SoundEffects["deploy"].Play();
+      ResourceManager.SoundEffects["deploy"].Play();
       grid.PlaceShip(currentShip);
       unplacedShipIndex = 0;
       currentShip = new Ship(unplacedShips[unplacedShipIndex]);

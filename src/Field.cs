@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using System;
+using Battleships.Resources;
 
 namespace Battleships;
 
@@ -18,7 +19,7 @@ public class Field {
   public Field(Grid grid, Vector2 position, Texture2D texture) {
     this.grid = grid;
     this.position = position;
-    texture = BattleshipGame.Instance.GetRandomOceanTile();
+    this.texture = ResourceManager.GetRandomOceanTile();
 
     Attacked = false;
     Sunken = false;
@@ -35,17 +36,17 @@ public class Field {
       if (Attacked && !Sunken) {
         Vector2 scale = new Vector2((float)(grid.FieldSize - 5) / texture.Width);
         Vector2 offset = new Vector2(5f / 2);
-        batch.Draw(BattleshipGame.Instance.Fire, position + new Vector2(8 * scale.X, 8 * scale.Y) + offset, null, Color.White, 0f, new Vector2(8, 8), scale, SpriteEffects.None, 0f);
+        batch.Draw(ResourceManager.Fire, position + new Vector2(8 * scale.X, 8 * scale.Y) + offset, null, Color.White, 0f, new Vector2(8, 8), scale, SpriteEffects.None, 0f);
       } else if (Attacked && Sunken) {
         Vector2 scale = new Vector2((float)(grid.FieldSize - 5) / texture.Width);
         Vector2 offset = new Vector2(5f / 2);
-        batch.Draw(BattleshipGame.Instance.Sunken, position + new Vector2(8 * scale.X, 8 * scale.Y) + offset, null, Color.White, 0f, new Vector2(8, 8), scale, SpriteEffects.None, 0f);
+        batch.Draw(ResourceManager.Sunken, position + new Vector2(8 * scale.X, 8 * scale.Y) + offset, null, Color.White, 0f, new Vector2(8, 8), scale, SpriteEffects.None, 0f);
       }
     } else {
       if (Attacked) {
         Vector2 scale = new Vector2(MathF.Round((float)(grid.FieldSize - 15) / texture.Width));
         Vector2 offset = new Vector2(15f / 2);
-        batch.Draw(BattleshipGame.Instance.MissedAttack, position + new Vector2(8 * scale.X, 8 * scale.Y) + offset, null, Color.White, 0f, new Vector2(8, 8), scale, SpriteEffects.None, 0f);
+        batch.Draw(ResourceManager.MissedAttack, position + new Vector2(8 * scale.X, 8 * scale.Y) + offset, null, Color.White, 0f, new Vector2(8, 8), scale, SpriteEffects.None, 0f);
       }
     }
   }

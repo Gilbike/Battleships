@@ -2,6 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Battleships.Resources;
 
 namespace Battleships;
 
@@ -68,7 +69,7 @@ public class Match {
   public async void AttackOpponent() {
     Vector2 clickedField = opponentGrid.GetHoveredField();
     bool didHitShip = opponentGrid.AttackField(clickedField);
-    BattleshipGame.Instance.SoundEffects["fire"].Play();
+    ResourceManager.SoundEffects["fire"].Play();
     if (!didHitShip) {
       turningSide = 0;
       bool didHitPlayer = false;
@@ -90,7 +91,7 @@ public class Match {
     playerGrid.Render(batch);
     if (matchState == MatchState.Battle) {
       opponentGrid.Render(batch);
-      batch.DrawString(BattleshipGame.Instance.UIFont, $"{(turningSide == 1 ? "Player" : "AI")}'s turn", new Vector2(10, 320), Color.White);
+      batch.DrawString(ResourceManager.Font, $"{(turningSide == 1 ? "Player" : "AI")}'s turn", new Vector2(10, 320), Color.White);
     }
   }
 }

@@ -2,6 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Battleships.Resources;
 
 namespace Battleships;
 
@@ -47,7 +48,7 @@ public static class EndScreen {
   }
 
   public static void LoadContent() {
-    font = BattleshipGame.Instance.UIFont;
+    font = ResourceManager.Font;
     restartTextSize = font.MeasureString("New Game");
     exitTextSize = font.MeasureString("Exit");
   }

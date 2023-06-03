@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Battleships.Resources;
 
 namespace Battleships;
 
@@ -36,24 +37,24 @@ public class Ship {
     for (int i = 0; i < Size; i++) {
       parts[i] = new ShipPart {
         location = location + offset * i,
-        texture = BattleshipGame.Instance.ShipBody,
+        texture = ResourceManager.ShipBody,
         rotation = orientation == ShipOrientation.Horizontal ? isFirstFront ? -90f : 90f : isFirstFront ? 0f : 180f
       };
     }
 
     // set front and back sprite
     if (isFirstFront) {
-      parts[0].texture = BattleshipGame.Instance.ShipFront;
-      parts[parts.Length - 1].texture = BattleshipGame.Instance.ShipBack;
+      parts[0].texture = ResourceManager.ShipFront;
+      parts[parts.Length - 1].texture = ResourceManager.ShipBack;
     } else {
-      parts[parts.Length - 1].texture = BattleshipGame.Instance.ShipFront;
-      parts[0].texture = BattleshipGame.Instance.ShipBack;
+      parts[parts.Length - 1].texture = ResourceManager.ShipFront;
+      parts[0].texture = ResourceManager.ShipBack;
     }
 
     // set command center sprite
     if (centerIndexes[Size] != -1) {
       int index = isFirstFront ? centerIndexes[Size] : (Size - 1) - centerIndexes[Size];
-      parts[index].texture = BattleshipGame.Instance.ShipCenter;
+      parts[index].texture = ResourceManager.ShipCenter;
     }
 
     return parts;
