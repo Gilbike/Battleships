@@ -32,6 +32,7 @@ public class BattleshipGame : Game {
   public SpriteFont UIFont { get; private set; }
   public Dictionary<string, SoundEffect> SoundEffects = new Dictionary<string, SoundEffect>();
   private List<Texture2D> oceanTiles = new List<Texture2D>();
+  public Texture2D ShipBody;
 
   private Match currentMatch;
 
@@ -105,6 +106,7 @@ public class BattleshipGame : Game {
     oceanTiles.Add(Content.Load<Texture2D>("Content/sprites/ocean1"));
     oceanTiles.Add(Content.Load<Texture2D>("Content/sprites/ocean2"));
     oceanTiles.Add(Content.Load<Texture2D>("Content/sprites/ocean3"));
+    ShipBody = Content.Load<Texture2D>("Content/sprites/shipbody");
     EndScreen.LoadContent();
   }
 
