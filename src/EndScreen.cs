@@ -34,8 +34,7 @@ public static class EndScreen {
 
   public static void Initialize() {
     rectangle = new Texture2D(BattleshipGame.Instance.GraphicsDevice, 1, 1);
-    Color[] data = new Color[] { Color.White };
-    rectangle.SetData(data);
+    rectangle.SetData(new Color[] { Color.White });
 
     fullScreenScale = new Vector2(BattleshipGame.Instance.GraphicsDevice.Viewport.Width, BattleshipGame.Instance.GraphicsDevice.Viewport.Height);
     screenCenter = new Vector2(fullScreenScale.X / 2, fullScreenScale.Y / 2);

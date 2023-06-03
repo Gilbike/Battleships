@@ -5,52 +5,48 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Battleships;
 
 public class Grid {
-  private Vector2 _position;
-  private int _size;
-  private bool _encoded;
+  private Vector2 position;
+  private int size;
 
-  public bool Encoded => _encoded;
+  private Texture2D fieldTexture;
 
-  private int _fieldSize;
-  private Texture2D _fieldTexture;
+  private Field[] fields = new Field[10 * 10];
+  private Ship[] ships = new Ship[5];
 
-  private Field[] _fields = new Field[10 * 10];
-
-  private Ship[] _ships = new Ship[5];
+  public bool Encoded { get; private set; }
+  public int FieldSize { get; private set; }
 
   public Action onFleetDestroyed;
 
-  public int FieldSize => _fieldSize;
-
   public Grid(Vector2 position, int size, bool encoded) {
-    _position = position;
-    _size = size;
-    _encoded = encoded;
-    _fieldSize = size / 10;
+    this.position = position;
+    this.size = size;
+    Encoded = encoded;
+    FieldSize = size / 10;
 
     CreateFieldTexture();
     CreateFields();
   }
 
   private void CreateFieldTexture() {
-    _fieldTexture = new Texture2D(BattleshipGame.Instance.GraphicsDevice, _fieldSize, _fieldSize);
-    Color[] data = new Color[_fieldSize * _fieldSize];
-    for (int i = 0; i < _fieldSize * _fieldSize; i++) {
+    fieldTexture = new Texture2D(BattleshipGame.Instance.GraphicsDevice, FieldSize, FieldSize);
+    Color[] data = new Color[FieldSize * FieldSize];
+    for (int i = 0; i < FieldSize * FieldSize; i++) {
       data[i] = Color.White;
     }
-    _fieldTexture.SetData(data);
+    fieldTexture.SetData(data);
   }
 
   private void CreateFields() {
     for (int row = 0; row < 10; row++) {
       for (int col = 0; col < 10; col++) {
-        _fields[col + row * 10] = new Field(this, new Vector2(_position.X + col * _fieldSize, _position.Y + row * _fieldSize), _fieldTexture);
+        fields[col + row * 10] = new Field(this, new Vector2(position.X + col * FieldSize, position.Y + row * FieldSize), fieldTexture);
       }
     }
   }
 
   public Field GetField(int index) {
-    return _fields[index];
+    return fields[index];
   }
 
   public int GetIndexFromLocationVector(Vector2 location) {
@@ -62,19 +58,21 @@ public class Grid {
   }
 
   public Vector4 GetDimensions() {
-    return new Vector4(_position.X, _position.Y, _position.X + _size, _position.Y + _size);
+    return new Vector4(position.X, position.Y, position.X + size, position.Y + size);
   }
 
   public Vector2 GetHoveredField() {
     int x = BattleshipGame.Instance.mouseState.X;
     int y = BattleshipGame.Instance.mouseState.Y;
     for (int row = 0; row < 10; row++) {
-      if (y < _position.Y + row * _fieldSize || y > _position.Y + (row + 1) * _fieldSize)
+      if (y < position.Y + row * FieldSize || y > position.Y + (row + 1) * FieldSize) {
         continue;
+      }
 
       for (int col = 0; col < 10; col++) {
-        if (x < _position.X + col * _fieldSize || x > _position.X + (col + 1) * _fieldSize)
+        if (x < position.X + col * FieldSize || x > position.X + (col + 1) * FieldSize) {
           continue;
+        }
 
         return new Vector2(col, row);
       }
@@ -83,32 +81,32 @@ public class Grid {
   }
 
   public void PlaceShip(Ship ship) {
-    for (int i = 0; i < _ships.Length; i++) {
-      if (_ships[i] != null)
+    for (int i = 0; i < ships.Length; i++) {
+      if (ships[i] != null) {
         continue;
+      }
 
-      _ships[i] = ship;
+      ships[i] = ship;
       ShipPart[] locations = ship.GetParts();
       foreach (ShipPart location in locations) {
         int index = GetIndexFromLocationVector(location.location);
-        _fields[index].Part = location;
-        _fields[index].ShipID = i;
+        fields[index].Part = location;
+        fields[index].ShipID = i;
       }
       break;
     }
   }
 
   public bool AttackField(int index) {
-    Field attackedField = _fields[index];
+    Field attackedField = fields[index];
     if (attackedField.Part == null) {
       attackedField.Attacked = true;
-
     } else if (attackedField.Part != null) {
       attackedField.Attacked = true;
-      bool shipDied = _ships[attackedField.ShipID].Hit();
+      bool shipDied = ships[attackedField.ShipID].Hit();
       if (shipDied) {
-        foreach (Vector2 location in _ships[attackedField.ShipID].GetLocations()) {
-          _fields[GetIndexFromLocationVector(location)].Sunken = true;
+        foreach (Vector2 location in ships[attackedField.ShipID].GetLocations()) {
+          fields[GetIndexFromLocationVector(location)].Sunken = true;
         }
         if (!isFleetAlive()) {
           onFleetDestroyed?.Invoke();
@@ -124,8 +122,10 @@ public class Grid {
   }
 
   public bool isFleetAlive() {
-    foreach (Ship ship in _ships) {
-      if (ship.Alive) return true;
+    foreach (Ship ship in ships) {
+      if (ship.Alive) {
+        return true;
+      }
     }
     return false;
   }
@@ -154,10 +154,8 @@ public class Grid {
   }
 
   public void Render(SpriteBatch batch) {
-    foreach (Field field in _fields) {
+    foreach (Field field in fields) {
       field.Render(batch);
     }
   }
-
-  public void Update() { }
 }

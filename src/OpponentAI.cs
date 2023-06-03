@@ -7,10 +7,10 @@ using Microsoft.Xna.Framework;
 namespace Battleships;
 
 public class OpponentAI {
-  private Grid _playerGrid;
+  private Grid playerGrid;
   private Random random;
 
-  private LastAttackResult _lastResult = new LastAttackResult();
+  private LastAttackResult lastResult = new LastAttackResult();
 
   private LineAttack lineAttack = new LineAttack();
 
@@ -21,7 +21,7 @@ public class OpponentAI {
 
   public OpponentAI(Grid playerGrid) {
     random = new Random();
-    _playerGrid = playerGrid;
+    this.playerGrid = playerGrid;
   }
 
   private void CalculateQuarters() {
@@ -36,7 +36,7 @@ public class OpponentAI {
 
       for (int row = minRow; row < maxRow; row++) {
         for (int col = minCol; col < maxCol; col++) {
-          int index = _playerGrid.GetIndexFromLocationVector(new Vector2(col, row));
+          int index = playerGrid.GetIndexFromLocationVector(new Vector2(col, row));
           if (attackedFields.IndexOf(index) != -1) {
             quarter++;
           }
@@ -59,8 +59,8 @@ public class OpponentAI {
     do {
       selectedField = random.Next(100);
 
-      if (_lastResult.successful || lineAttack.enabled) { // select neighbour field when hit successful
-        int[] neighbours = _playerGrid.GetNeighbourFields(_lastResult.location);
+      if (lastResult.successful || lineAttack.enabled) { // select neighbour field when hit successful
+        int[] neighbours = playerGrid.GetNeighbourFields(lastResult.location);
         if (!lineAttack.enabled || lineAttack.searchingForDirection) {
           int searchTries = 0;
           do {
@@ -107,15 +107,15 @@ public class OpponentAI {
       int minCol = laggingRegionIndex % 2 == 0 ? 0 : 5;
       int maxCol = laggingRegionIndex % 2 == 0 ? 5 : 10;
 
-      selectedField = _playerGrid.GetIndexFromLocationVector(new Vector2(random.Next(minCol, maxCol), random.Next(minRow, maxRow)));
+      selectedField = playerGrid.GetIndexFromLocationVector(new Vector2(random.Next(minCol, maxCol), random.Next(minRow, maxRow)));
 
       attacksSinceCheck = 0;
     }
 
-    result = _playerGrid.AttackField(selectedField);
+    result = playerGrid.AttackField(selectedField);
     attackedFields.Add(selectedField);
 
-    if (_lastResult.successful && !result) { // last one was successful but this one was not
+    if (lastResult.successful && !result) { // last one was successful but this one was not
       if (lineAttack.enabled) {
         lineAttack = new LineAttack();
       } else if (!lineAttack.enabled && selectedDirection != -1) {
@@ -123,7 +123,7 @@ public class OpponentAI {
         lineAttack.searchedDirections[selectedDirection] = true;
       }
     }
-    if (_lastResult.successful && result && !lineAttack.enabled && selectedDirection != -1) {
+    if (lastResult.successful && result && !lineAttack.enabled && selectedDirection != -1) {
       lineAttack.enabled = true;
       lineAttack.searchingForDirection = false;
       lineAttack.direction = selectedDirection;
@@ -133,10 +133,10 @@ public class OpponentAI {
     }
 
     if (lineAttack.enabled && lineAttack.searchingForDirection) {
-      selectedField = _lastResult.location;
+      selectedField = lastResult.location;
     }
 
-    _lastResult = new LastAttackResult { location = selectedField, successful = result };
+    lastResult = new LastAttackResult { location = selectedField, successful = result };
 
     attacksSinceCheck++;
 

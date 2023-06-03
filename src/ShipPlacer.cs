@@ -9,7 +9,7 @@ namespace Battleships;
 public class ShipPlacer {
   private readonly List<int> SHIPS = new List<int>() { 5, 4, 3, 3, 2 };
 
-  private Grid _grid;
+  private Grid grid;
 
   // for player placement
   private List<int> unplacedShips;
@@ -25,7 +25,7 @@ public class ShipPlacer {
   private bool rightSideBig = false;
 
   public ShipPlacer(Grid grid) {
-    _grid = grid;
+    this.grid = grid;
   }
 
   public void StartPlayerPlacement() {
@@ -41,7 +41,7 @@ public class ShipPlacer {
       do {
         proposedLocations.Clear();
         int startField = random.Next(100);
-        Vector2 placeLocation = _grid.GetLocationVectorFromIndex(startField);
+        Vector2 placeLocation = grid.GetLocationVectorFromIndex(startField);
 
         if (size > 3) {
           bool tryLeftSide = random.Next(100) > 50 ? true : false;
@@ -63,17 +63,19 @@ public class ShipPlacer {
         ship = new Ship(size);
         ship.Place(placeLocation, shipOrientation).ToList().ForEach(part => proposedLocations.Add(part.location));
       } while (!isPlacementValid(proposedLocations.ToArray()));
-      _grid.PlaceShip(ship);
+      grid.PlaceShip(ship);
     }
   }
 
   public bool isPlacementValid(Vector2[] locations) {
     foreach (Vector2 location in locations) {
-      if (location.X > 9 || location.Y > 9) // outside of grid
+      if (location.X > 9 || location.Y > 9) { // outside of grid 
         return false;
-      Field field = _grid.GetField(_grid.GetIndexFromLocationVector(location));
-      if (field.Part != null)
+      }
+      Field field = grid.GetField(grid.GetIndexFromLocationVector(location));
+      if (field.Part != null) {
         return false;
+      }
     }
     return true;
   }
@@ -82,26 +84,30 @@ public class ShipPlacer {
   private bool isLeftMousePressed = false;
   private int lastWheelValue = 0;
   public void Update() {
-    if (currentShip == null)
+    if (currentShip == null) {
       return;
+    }
     MouseState mState = BattleshipGame.Instance.mouseState;
     KeyboardState kState = BattleshipGame.Instance.keyboardState;
-    Vector4 dimensions = _grid.GetDimensions();
-    if (mState.X < dimensions.X || mState.X > dimensions.Z || mState.Y < dimensions.Y || mState.Y > dimensions.W)
+    Vector4 dimensions = grid.GetDimensions();
+    if (mState.X < dimensions.X || mState.X > dimensions.Z || mState.Y < dimensions.Y || mState.Y > dimensions.W) {
       return;
+    }
 
     bool isPlacementValid = true;
 
     // Change held ship size
     if (lastWheelValue > mState.ScrollWheelValue && unplacedShipIndex + 1 < unplacedShips.Count) {
       unplacedShipIndex += 1;
-      foreach (Field field in lastFields)
+      foreach (Field field in lastFields) {
         field.Part = null;
+      }
       currentShip = new Ship(unplacedShips[unplacedShipIndex]);
     } else if (lastWheelValue < mState.ScrollWheelValue && unplacedShipIndex > 0) {
       unplacedShipIndex -= 1;
-      foreach (Field field in lastFields)
+      foreach (Field field in lastFields) {
         field.Part = null;
+      }
       currentShip = new Ship(unplacedShips[unplacedShipIndex]);
     }
     lastWheelValue = mState.ScrollWheelValue;
@@ -115,19 +121,22 @@ public class ShipPlacer {
     }
 
     // Set held ship location
-    foreach (Field field in lastFields)
+    foreach (Field field in lastFields) {
       field.Part = null;
+    }
     lastFields.Clear();
 
-    Vector2 baseLocation = _grid.GetHoveredField();
-    if (baseLocation == new Vector2(-1, -1)) return;
+    Vector2 baseLocation = grid.GetHoveredField();
+    if (baseLocation == new Vector2(-1, -1)) {
+      return;
+    }
     ShipPart[] shipLocations = currentShip.Place(baseLocation, orientation);
     foreach (ShipPart part in shipLocations) {
       if (part.location.X > 9 || part.location.Y > 9) { // outside of grid
         isPlacementValid = false;
         continue;
       }
-      Field field = _grid.GetField(_grid.GetIndexFromLocationVector(part.location));
+      Field field = grid.GetField(grid.GetIndexFromLocationVector(part.location));
       if (field.Part != null) {
         isPlacementValid = false;
       } else {
@@ -139,7 +148,9 @@ public class ShipPlacer {
     // Place held ship
     if (mState.LeftButton == ButtonState.Pressed && !isLeftMousePressed) {
       isLeftMousePressed = true;
-      if (!isPlacementValid) return;
+      if (!isPlacementValid) {
+        return;
+      }
       unplacedShips.RemoveAt(unplacedShipIndex);
       if (unplacedShips.Count == 0) {
         onPlacementDone?.Invoke();
@@ -147,11 +158,12 @@ public class ShipPlacer {
         return;
       }
       BattleshipGame.Instance.SoundEffects["deploy"].Play();
-      _grid.PlaceShip(currentShip);
+      grid.PlaceShip(currentShip);
       unplacedShipIndex = 0;
       currentShip = new Ship(unplacedShips[unplacedShipIndex]);
       lastFields.Clear();
-    } else if (mState.LeftButton == ButtonState.Released && isLeftMousePressed)
+    } else if (mState.LeftButton == ButtonState.Released && isLeftMousePressed) {
       isLeftMousePressed = false;
+    }
   }
 }

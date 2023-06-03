@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -7,75 +6,76 @@ using Microsoft.Xna.Framework.Input;
 namespace Battleships;
 
 public class Match {
-  private SpriteBatch _batch;
+  private SpriteBatch batch;
 
-  private Grid _playerGrid;
-  private Grid _opponentGrid;
+  private Grid playerGrid;
+  private Grid opponentGrid;
 
-  private ShipPlacer _placer;
+  private ShipPlacer placer;
   private OpponentAI oppenent;
 
   private MatchState matchState = MatchState.Placement;
-
-  private int OnTurn; // 1 - localplayer, 0 - opponent
-
+  private int turningSide; // 1 - localplayer, 0 - opponent
   private int loser;
 
   public Action<string> OnMatchEnd;
 
   public Match() {
-    _batch = BattleshipGame.Instance.Batch;
-    _playerGrid = new Grid(new Vector2(10, 10), 305, false);
-    _playerGrid.onFleetDestroyed += delegate () { EndGame(1); };
-    _opponentGrid = new Grid(new Vector2(335, 10), 450, true);
-    _opponentGrid.onFleetDestroyed += delegate () { EndGame(0); };
+    batch = BattleshipGame.Instance.Batch;
+    playerGrid = new Grid(new Vector2(10, 10), 305, false);
+    playerGrid.onFleetDestroyed += delegate () { EndGame(1); };
+    opponentGrid = new Grid(new Vector2(335, 10), 450, true);
+    opponentGrid.onFleetDestroyed += delegate () { EndGame(0); };
 
-    _placer = new ShipPlacer(_playerGrid);
-    _placer.StartPlayerPlacement();
-    _placer.onPlacementDone += onPlacementDone;
+    placer = new ShipPlacer(playerGrid);
+    placer.StartPlayerPlacement();
+    placer.onPlacementDone += onPlacementDone;
 
-    ShipPlacer _aiPlacer = new ShipPlacer(_opponentGrid);
+    ShipPlacer _aiPlacer = new ShipPlacer(opponentGrid);
     _aiPlacer.PlaceRandom();
 
-    oppenent = new OpponentAI(_playerGrid);
+    oppenent = new OpponentAI(playerGrid);
   }
 
   private bool isLeftClicked = false;
   public void Update() {
-    if (matchState == MatchState.Placement)
-      _placer.Update();
-    else if (matchState == MatchState.Battle) {
+    if (matchState == MatchState.Placement) {
+      placer.Update();
+    } else if (matchState == MatchState.Battle) {
       MouseState state = BattleshipGame.Instance.mouseState;
       if (state.LeftButton == ButtonState.Pressed && !isLeftClicked) {
-        if (OnTurn == 0)
+        if (turningSide == 0) {
           return;
-        Vector4 opponentGridSize = _opponentGrid.GetDimensions();
-        if (state.X < opponentGridSize.X || state.X > opponentGridSize.Z || state.Y < opponentGridSize.Y || state.Y > opponentGridSize.W)
+        }
+        Vector4 opponentGridSize = opponentGrid.GetDimensions();
+        if (state.X < opponentGridSize.X || state.X > opponentGridSize.Z || state.Y < opponentGridSize.Y || state.Y > opponentGridSize.W) {
           return;
+        }
         AttackOpponent();
         isLeftClicked = true;
-      } else if (state.LeftButton == ButtonState.Released && isLeftClicked)
+      } else if (state.LeftButton == ButtonState.Released && isLeftClicked) {
         isLeftClicked = false;
+      }
     }
   }
 
   public void onPlacementDone() {
     matchState = MatchState.Battle;
-    _placer = null;
-    OnTurn = 1;
+    placer = null;
+    turningSide = 1;
   }
 
   public async void AttackOpponent() {
-    Vector2 clickedField = _opponentGrid.GetHoveredField();
-    bool didHitShip = _opponentGrid.AttackField(clickedField);
+    Vector2 clickedField = opponentGrid.GetHoveredField();
+    bool didHitShip = opponentGrid.AttackField(clickedField);
     BattleshipGame.Instance.SoundEffects["fire"].Play();
     if (!didHitShip) {
-      OnTurn = 0;
+      turningSide = 0;
       bool didHitPlayer = false;
       do {
         didHitPlayer = await oppenent.AttackPlayer();
       } while (didHitPlayer);
-      OnTurn = 1;
+      turningSide = 1;
     }
   }
 
@@ -87,10 +87,10 @@ public class Match {
   }
 
   public void Render() {
-    _playerGrid.Render(_batch);
+    playerGrid.Render(batch);
     if (matchState == MatchState.Battle) {
-      _opponentGrid.Render(_batch);
-      _batch.DrawString(BattleshipGame.Instance.UIFont, $"{(OnTurn == 1 ? "Player" : "AI")}'s turn", new Vector2(10, 320), Color.White);
+      opponentGrid.Render(batch);
+      batch.DrawString(BattleshipGame.Instance.UIFont, $"{(turningSide == 1 ? "Player" : "AI")}'s turn", new Vector2(10, 320), Color.White);
     }
   }
 }
