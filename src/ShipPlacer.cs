@@ -72,7 +72,7 @@ public class ShipPlacer {
       if (location.X > 9 || location.Y > 9) // outside of grid
         return false;
       Field field = _grid.GetField(_grid.GetIndexFromLocationVector(location));
-      if (field.State == FieldState.Ship)
+      if (field.Part != null)
         return false;
     }
     return true;

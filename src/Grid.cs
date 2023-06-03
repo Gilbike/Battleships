@@ -88,10 +88,10 @@ public class Grid : BaseObject {
         continue;
 
       _ships[i] = ship;
-      Vector2[] locations = ship.GetLocations();
-      foreach (Vector2 location in locations) {
-        int index = GetIndexFromLocationVector(location);
-        _fields[index].State = FieldState.Ship;
+      ShipPart[] locations = ship.GetParts();
+      foreach (ShipPart location in locations) {
+        int index = GetIndexFromLocationVector(location.location);
+        _fields[index].Part = location;
         _fields[index].ShipID = i;
       }
       break;

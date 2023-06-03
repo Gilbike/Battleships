@@ -76,6 +76,12 @@ public class Ship {
     return locations;
   }
 
+  public ShipPart[] GetParts() {
+    if (!_placed)
+      return new ShipPart[0];
+    return parts;
+  }
+
   public bool Hit() {
     hitCount++;
     return !Alive;
