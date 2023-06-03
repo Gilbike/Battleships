@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Battleships;
 
-public class Grid : BaseObject {
+public class Grid {
   private Vector2 _position;
   private int _size;
   private bool _encoded;

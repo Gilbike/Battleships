@@ -4,7 +4,7 @@ using System;
 
 namespace Battleships;
 
-public class Field : BaseObject {
+public class Field {
   private Texture2D _texture;
   private Vector2 _position;
   private Grid _grid;
