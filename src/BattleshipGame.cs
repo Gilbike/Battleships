@@ -36,6 +36,7 @@ public class BattleshipGame : Game {
   public Texture2D ShipFront;
   public Texture2D ShipBack;
   public Texture2D ShipCenter;
+  public Texture2D MissedAttack;
 
   private Match currentMatch;
 
@@ -113,6 +114,7 @@ public class BattleshipGame : Game {
     ShipFront = Content.Load<Texture2D>("Content/sprites/shipfront");
     ShipBack = Content.Load<Texture2D>("Content/sprites/shipback");
     ShipCenter = Content.Load<Texture2D>("Content/sprites/shipcenter");
+    MissedAttack = Content.Load<Texture2D>("Content/sprites/miss");
     EndScreen.LoadContent();
   }
 
