@@ -33,16 +33,22 @@ public class Ship {
     for (int i = 0; i < Size; i++) {
       parts[i] = new ShipPart {
         location = location + offset * i,
-        partType = ShipPieceType.Default,
-        texture = BattleshipGame.Instance.ShipBody
+        texture = BattleshipGame.Instance.ShipBody,
+        rotation = orientation == ShipOrientation.Horizontal ? 90f : 0f
       };
     }
     if (isFirstFront) {
-      parts[0].partType = ShipPieceType.Front;
       parts[0].texture = BattleshipGame.Instance.ShipFront;
+      parts[0].rotation *= -1;
+      parts[parts.Length - 1].texture = BattleshipGame.Instance.ShipBack;
+      parts[parts.Length - 1].rotation *= -1;
     } else {
-      parts[parts.Length - 1].partType = ShipPieceType.Front;
       parts[parts.Length - 1].texture = BattleshipGame.Instance.ShipFront;
+      parts[0].texture = BattleshipGame.Instance.ShipBack;
+      if (orientation == ShipOrientation.Vertical) {
+        parts[parts.Length - 1].rotation = 180f;
+        parts[0].rotation = 180f;
+      }
     }
     return parts;
   }
@@ -67,8 +73,8 @@ public class Ship {
 
 public class ShipPart {
   public Vector2 location;
-  public ShipPieceType partType;
   public Texture2D texture;
+  public float rotation;
 }
 
 public enum ShipPieceType {

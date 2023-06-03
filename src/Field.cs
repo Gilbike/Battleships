@@ -41,7 +41,7 @@ public class Field : BaseObject {
     batch.Draw(_texture, _position, null, Color.White, 0f, Vector2.Zero, new Vector2((float)_grid.FieldSize / _texture.Width), SpriteEffects.None, 0f);
     if (Part != null) {
       Vector2 scale = new Vector2((float)_grid.FieldSize / _texture.Width);
-      batch.Draw(Part.texture, _position + new Vector2(8 * scale.X, 8 * scale.Y), null, Color.White, MathHelper.ToRadians(90f), new Vector2(8, 8), scale, SpriteEffects.None, 0f);
+      batch.Draw(Part.texture, _position + new Vector2(8 * scale.X, 8 * scale.Y), null, Color.White, MathHelper.ToRadians(Part.rotation), new Vector2(8, 8), scale, SpriteEffects.None, 0f);
     }
   }
 
