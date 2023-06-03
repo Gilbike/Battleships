@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using System;
 
 namespace Battleships;
 
@@ -28,6 +29,12 @@ public class Field : BaseObject {
     if (Part != null) {
       Vector2 scale = new Vector2((float)_grid.FieldSize / _texture.Width);
       batch.Draw(Part.texture, _position + new Vector2(8 * scale.X, 8 * scale.Y), null, Color.White, MathHelper.ToRadians(Part.rotation), new Vector2(8, 8), scale, SpriteEffects.None, 0f);
+    } else {
+      if (Attacked) {
+        Vector2 scale = new Vector2(MathF.Round((float)(_grid.FieldSize - 15) / _texture.Width));
+        Vector2 offset = new Vector2(15f / 2);
+        batch.Draw(BattleshipGame.Instance.MissedAttack, _position + new Vector2(8 * scale.X, 8 * scale.Y) + offset, null, Color.White, 0f, new Vector2(8, 8), scale, SpriteEffects.None, 0f);
+      }
     }
   }
 
