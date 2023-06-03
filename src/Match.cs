@@ -68,6 +68,9 @@ public class Match {
 
   public async void AttackOpponent() {
     Vector2 clickedField = opponentGrid.GetHoveredField();
+    if (opponentGrid.GetField(opponentGrid.GetIndexFromLocationVector(clickedField)).Attacked) {
+      return;
+    }
     bool didHitShip = opponentGrid.AttackField(clickedField);
     ResourceManager.SoundEffects["fire"].Play();
     if (!didHitShip) {
