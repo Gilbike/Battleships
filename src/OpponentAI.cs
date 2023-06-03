@@ -8,7 +8,6 @@ namespace Battleships;
 
 public class OpponentAI {
   private Grid playerGrid;
-  private Random random;
 
   private LastAttackResult lastResult = new LastAttackResult();
 
@@ -20,7 +19,6 @@ public class OpponentAI {
   private int[] quarters = new int[4];
 
   public OpponentAI(Grid playerGrid) {
-    random = new Random();
     this.playerGrid = playerGrid;
   }
 
@@ -47,6 +45,7 @@ public class OpponentAI {
   }
 
   public async Task<bool> AttackPlayer() {
+    Random random = BattleshipGame.random;
     await Task.Delay(random.Next(500, 1750));
 
     int selectedField;

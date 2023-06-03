@@ -35,7 +35,7 @@ public class ShipPlacer {
   }
 
   public void PlaceRandom() {
-    Random random = new Random();
+    Random random = BattleshipGame.random;
     foreach (int size in SHIPS.OrderBy(x => random.Next()).ToList()) {
       List<Vector2> proposedLocations = new List<Vector2>();
       Ship ship;

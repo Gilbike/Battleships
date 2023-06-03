@@ -8,7 +8,6 @@ using Battleships.Resources;
 namespace Battleships;
 
 public class Ship {
-  private static Random random = new Random();
   private static Dictionary<int, int> centerIndexes = new Dictionary<int, int>() {
     {5, 2},
     {4, 2},
@@ -26,6 +25,7 @@ public class Ship {
   private ShipPart[] parts;
 
   public Ship(int size) {
+    Random random = BattleshipGame.random;
     this.Size = size;
     parts = new ShipPart[size];
     isFirstFront = random.Next(100) > 50;
