@@ -8,7 +8,7 @@ using Battleships.Resources;
 namespace Battleships;
 
 public class Ship {
-  private static Dictionary<int, int> centerIndexes = new Dictionary<int, int>() {
+  public static Dictionary<int, int> centerIndexes = new Dictionary<int, int>() {
     {5, 2},
     {4, 2},
     {3, 1},

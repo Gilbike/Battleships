@@ -28,7 +28,7 @@ public class MainMenu : UIScreen {
     int widthFit = (int)screenSize.X / 16;
     int heightFit = (int)screenSize.Y / 16;
 
-    int shipCount = BattleshipGame.random.Next(5, 21);
+    int shipCount = BattleshipGame.random.Next(8, 26);
     BattleshipGame.Instance.GraphicsDevice.SetRenderTarget(background);
     BattleshipGame.Instance.Batch.Begin();
     for (int row = 0; row < heightFit; row++) {
@@ -48,8 +48,9 @@ public class MainMenu : UIScreen {
       float rotation = orientation == ShipOrientation.Horizontal ? startWithBack ? 90f : -90f : startWithBack ? 180f : 0;
       BattleshipGame.Instance.Batch.Draw(firstSprite, new Vector2(basePosition.X * 16, basePosition.Y * 16), null, Color.White, MathHelper.ToRadians(rotation), Vector2.Zero, Vector2.One, SpriteEffects.None, 0f);
       for (int offset = 1; offset < shipSize; offset++) {
+        int commandCenterIndex = !startWithBack ? Ship.centerIndexes[shipSize] : (shipSize - 1) - Ship.centerIndexes[shipSize];
         Vector2 offsetVector = new Vector2(offset * (1 - (int)orientation) * 16, offset * (int)orientation * 16);
-        Texture2D sprite = offset + 1 == shipSize ? lastSprite : ResourceManager.ShipBody;
+        Texture2D sprite = offset + 1 == shipSize ? lastSprite : offset == commandCenterIndex ? ResourceManager.ShipCenter : ResourceManager.ShipBody;
         BattleshipGame.Instance.Batch.Draw(sprite, new Vector2(basePosition.X * 16, basePosition.Y * 16) + offsetVector, null, Color.White, MathHelper.ToRadians(rotation), Vector2.Zero, Vector2.One, SpriteEffects.None, 0f);
       }
     }
