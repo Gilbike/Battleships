@@ -21,6 +21,7 @@ public static class ResourceManager {
   public static Texture2D Fire;
   public static Texture2D Sunken;
   public static Texture2D UISurface;
+  public static Texture2D Select;
 
   public static void Create(ContentManager Content) {
     Font = Content.Load<SpriteFont>("Content/fonts/UI");
@@ -38,6 +39,7 @@ public static class ResourceManager {
     Sunken = Content.Load<Texture2D>("Content/sprites/skull");
     UISurface = new Texture2D(BattleshipGame.Instance.GraphicsDevice, 1, 1);
     UISurface.SetData(new Color[] { Color.White });
+    Select = Content.Load<Texture2D>("Content/sprites/select");
   }
 
   public static Texture2D GetRandomOceanTile() {
