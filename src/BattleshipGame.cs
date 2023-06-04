@@ -28,6 +28,8 @@ public class BattleshipGame : Game {
 
   private Match currentMatch;
 
+  private GameOverHUD gameOverHUD;
+
   private BattleshipGame() {
     graphics = new GraphicsDeviceManager(this);
 
@@ -38,13 +40,9 @@ public class BattleshipGame : Game {
     Input.Init();
 
     ResourceManager.Create(Content);
-    EndScreen.LoadContent();
 
     batch = new SpriteBatch(GraphicsDevice);
     Window.Title = "Battleships";
-    EndScreen.Initialize();
-    EndScreen.OnRestartClick += OnRestartClick;
-    EndScreen.OnQuitClick += OnQuitClick;
 
     StartNewGame();
 
@@ -54,20 +52,15 @@ public class BattleshipGame : Game {
   private void StartNewGame() {
     currentMatch = new Match();
     currentMatch.OnMatchEnd += OnGameEnded;
+    gameOverHUD = null;
   }
 
   private void OnGameEnded(string winner) {
-    EndScreen.Enable($"{winner} wins!");
+    gameOverHUD = new GameOverHUD(winner);
+    gameOverHUD.NewGameRequested += StartNewGame;
+    gameOverHUD.ExitRequested += Exit;
+    UIManager.Screen = gameOverHUD;
     currentMatch = null;
-  }
-
-  private void OnRestartClick() {
-    StartNewGame();
-    EndScreen.Disable();
-  }
-
-  private void OnQuitClick() {
-    Exit();
   }
 
   protected override void Update(GameTime gameTime) {
@@ -81,8 +74,6 @@ public class BattleshipGame : Game {
     batch.Begin(samplerState: SamplerState.PointClamp);
     if (currentMatch != null) {
       currentMatch.Render();
-    } else {
-      EndScreen.Render();
     }
     UIManager.Render();
     batch.End();
