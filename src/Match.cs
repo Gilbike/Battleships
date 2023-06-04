@@ -54,7 +54,7 @@ public class Match {
 
   public async void AttackOpponent() {
     Vector2 clickedField = opponentGrid.GetHoveredField();
-    if (opponentGrid.GetField(opponentGrid.GetIndexFromLocationVector(clickedField)).Attacked) {
+    if (clickedField == new Vector2(-1) || opponentGrid.GetField(opponentGrid.GetIndexFromLocationVector(clickedField)).Attacked) {
       return;
     }
     bool didHitShip = opponentGrid.AttackField(clickedField);

@@ -138,9 +138,7 @@ public class ShipPlacer {
     if (baseLocation == new Vector2(-1, -1)) {
       return;
     }
-    System.Console.WriteLine(baseLocation);
     ShipPart[] shipLocations = currentShip.Place(baseLocation, orientation);
-    System.Console.WriteLine(shipLocations[0]);
     foreach (ShipPart part in shipLocations) {
       if (part.location.X > 9 || part.location.Y > 9) { // outside of grid
         isHeldPlacementValid = false;
