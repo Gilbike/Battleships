@@ -18,6 +18,7 @@ public class ShipPlacer {
   private Ship currentShip;
   private List<Field> lastFields = new List<Field>();
   private ShipOrientation orientation = ShipOrientation.Horizontal;
+  private bool isHeldPlacementValid = true;
 
   public Action onPlacementDone;
 
@@ -29,11 +30,7 @@ public class ShipPlacer {
     this.grid = grid;
   }
 
-  public void StartPlayerPlacement() {
-    unplacedShips = SHIPS;
-    currentShip = new Ship(unplacedShips[unplacedShipIndex]);
-  }
-
+  #region AI Placement
   public void PlaceRandom() {
     Random random = BattleshipGame.random;
     foreach (int size in SHIPS.OrderBy(x => random.Next()).ToList()) {
@@ -67,61 +64,68 @@ public class ShipPlacer {
       grid.PlaceShip(ship);
     }
   }
+  #endregion
 
-  public bool isPlacementValid(Vector2[] locations) {
-    foreach (Vector2 location in locations) {
-      if (location.X > 9 || location.Y > 9) { // outside of grid 
-        return false;
-      }
-      Field field = grid.GetField(grid.GetIndexFromLocationVector(location));
-      if (field.Part != null) {
-        return false;
-      }
-    }
-    return true;
+  #region Player Placement
+  public void StartPlayerPlacement() {
+    unplacedShips = SHIPS;
+    currentShip = new Ship(unplacedShips[unplacedShipIndex]);
+    Input.OnLeftMouseClicked += PlaceHeldShip;
+    Input.OnMouseScrolled += ChangeHeldShipSize;
+    Input.OnKeyPressed += ChangeHeldShipRotation;
+    Input.OnMouseMoved += ChangeHeldShipPosition;
   }
 
-  private bool isRPressed = false;
-  private bool isLeftMousePressed = false;
-  private int lastWheelValue = 0;
-  public void Update() {
-    if (currentShip == null) {
+  private void PlaceHeldShip(float x, float y) {
+    if (!isHeldPlacementValid) {
       return;
     }
-    MouseState mState = BattleshipGame.Instance.mouseState;
-    KeyboardState kState = BattleshipGame.Instance.keyboardState;
-    Vector4 dimensions = grid.GetDimensions();
-    if (mState.X < dimensions.X || mState.X > dimensions.Z || mState.Y < dimensions.Y || mState.Y > dimensions.W) {
+    unplacedShips.RemoveAt(unplacedShipIndex);
+    if (unplacedShips.Count == 0) {
+      onPlacementDone?.Invoke();
+      currentShip = null;
+      // Unsubscribe from events
+      Input.OnLeftMouseClicked -= PlaceHeldShip;
+      Input.OnMouseScrolled -= ChangeHeldShipSize;
+      Input.OnKeyPressed -= ChangeHeldShipRotation;
+      Input.OnMouseMoved -= ChangeHeldShipPosition;
       return;
     }
+    ResourceManager.SoundEffects["deploy"].Play();
+    grid.PlaceShip(currentShip);
+    unplacedShipIndex = 0;
+    currentShip = new Ship(unplacedShips[unplacedShipIndex]);
+    lastFields.Clear();
+  }
 
-    bool isPlacementValid = true;
-
-    // Change held ship size
-    if (lastWheelValue > mState.ScrollWheelValue && unplacedShipIndex + 1 < unplacedShips.Count) {
+  private void ChangeHeldShipSize(ScrollDirection direction) {
+    if (direction == ScrollDirection.Down && unplacedShipIndex + 1 < unplacedShips.Count) {
       unplacedShipIndex += 1;
       foreach (Field field in lastFields) {
         field.Part = null;
       }
       currentShip = new Ship(unplacedShips[unplacedShipIndex]);
-    } else if (lastWheelValue < mState.ScrollWheelValue && unplacedShipIndex > 0) {
+      ChangeHeldShipPosition(Input.MouseLocation.X, Input.MouseLocation.Y);
+    } else if (direction == ScrollDirection.Up && unplacedShipIndex > 0) {
       unplacedShipIndex -= 1;
       foreach (Field field in lastFields) {
         field.Part = null;
       }
       currentShip = new Ship(unplacedShips[unplacedShipIndex]);
+      ChangeHeldShipPosition(Input.MouseLocation.X, Input.MouseLocation.Y);
     }
-    lastWheelValue = mState.ScrollWheelValue;
+  }
 
-    // Rotate held ship
-    if (kState.IsKeyDown(Keys.R) && !isRPressed) {
+  private void ChangeHeldShipRotation(Keys key) {
+    if (key == Keys.R) {
       orientation = (ShipOrientation)1 - (int)orientation;
-      isRPressed = true;
-    } else if (kState.IsKeyUp(Keys.R) && isRPressed) {
-      isRPressed = false;
+      ChangeHeldShipPosition(Input.MouseLocation.X, Input.MouseLocation.Y);
     }
+  }
 
-    // Set held ship location
+  private void ChangeHeldShipPosition(float x, float y) {
+    isHeldPlacementValid = true;
+
     foreach (Field field in lastFields) {
       field.Part = null;
     }
@@ -134,37 +138,30 @@ public class ShipPlacer {
     ShipPart[] shipLocations = currentShip.Place(baseLocation, orientation);
     foreach (ShipPart part in shipLocations) {
       if (part.location.X > 9 || part.location.Y > 9) { // outside of grid
-        isPlacementValid = false;
+        isHeldPlacementValid = false;
         continue;
       }
       Field field = grid.GetField(grid.GetIndexFromLocationVector(part.location));
       if (field.Part != null) {
-        isPlacementValid = false;
+        isHeldPlacementValid = false;
       } else {
         field.Part = part;
         lastFields.Add(field);
       }
     }
+  }
+  #endregion
 
-    // Place held ship
-    if (mState.LeftButton == ButtonState.Pressed && !isLeftMousePressed) {
-      isLeftMousePressed = true;
-      if (!isPlacementValid) {
-        return;
+  private bool isPlacementValid(Vector2[] locations) {
+    foreach (Vector2 location in locations) {
+      if (location.X > 9 || location.Y > 9) { // outside of grid 
+        return false;
       }
-      unplacedShips.RemoveAt(unplacedShipIndex);
-      if (unplacedShips.Count == 0) {
-        onPlacementDone?.Invoke();
-        currentShip = null;
-        return;
+      Field field = grid.GetField(grid.GetIndexFromLocationVector(location));
+      if (field.Part != null) {
+        return false;
       }
-      ResourceManager.SoundEffects["deploy"].Play();
-      grid.PlaceShip(currentShip);
-      unplacedShipIndex = 0;
-      currentShip = new Ship(unplacedShips[unplacedShipIndex]);
-      lastFields.Clear();
-    } else if (mState.LeftButton == ButtonState.Released && isLeftMousePressed) {
-      isLeftMousePressed = false;
     }
+    return true;
   }
 }

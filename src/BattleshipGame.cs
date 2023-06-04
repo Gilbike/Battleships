@@ -36,6 +36,8 @@ public class BattleshipGame : Game {
   }
 
   protected override void Initialize() {
+    Input.Init();
+
     ResourceManager.Create(Content);
     EndScreen.LoadContent();
 

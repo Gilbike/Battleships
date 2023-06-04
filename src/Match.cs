@@ -40,9 +40,7 @@ public class Match {
 
   private bool isLeftClicked = false;
   public void Update() {
-    if (matchState == MatchState.Placement) {
-      placer.Update();
-    } else if (matchState == MatchState.Battle) {
+    if (matchState == MatchState.Battle) {
       MouseState state = BattleshipGame.Instance.mouseState;
       if (state.LeftButton == ButtonState.Pressed && !isLeftClicked) {
         if (turningSide == 0) {
