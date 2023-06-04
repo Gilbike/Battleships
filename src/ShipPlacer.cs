@@ -83,6 +83,8 @@ public class ShipPlacer {
     if (!isHeldPlacementValid) {
       return;
     }
+    ResourceManager.SoundEffects["deploy"].Play();
+    grid.PlaceShip(currentShip);
     unplacedShips.RemoveAt(unplacedShipIndex);
     if (unplacedShips.Count == 0) {
       onPlacementDone?.Invoke();
@@ -94,8 +96,6 @@ public class ShipPlacer {
       Input.OnMouseMoved -= ChangeHeldShipPosition;
       return;
     }
-    ResourceManager.SoundEffects["deploy"].Play();
-    grid.PlaceShip(currentShip);
     unplacedShipIndex = 0;
     currentShip = new Ship(unplacedShips[unplacedShipIndex]);
     lastFields.Clear();
