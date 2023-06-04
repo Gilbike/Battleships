@@ -38,30 +38,18 @@ public class Match {
     oppenent = new OpponentAI(playerGrid);
   }
 
-  private bool isLeftClicked = false;
-  public void Update() {
-    if (matchState == MatchState.Battle) {
-      MouseState state = BattleshipGame.Instance.mouseState;
-      if (state.LeftButton == ButtonState.Pressed && !isLeftClicked) {
-        if (turningSide == 0) {
-          return;
-        }
-        Vector4 opponentGridSize = opponentGrid.GetDimensions();
-        if (state.X < opponentGridSize.X || state.X > opponentGridSize.Z || state.Y < opponentGridSize.Y || state.Y > opponentGridSize.W) {
-          return;
-        }
-        AttackOpponent();
-        isLeftClicked = true;
-      } else if (state.LeftButton == ButtonState.Released && isLeftClicked) {
-        isLeftClicked = false;
-      }
+  private void OnClick(float x, float y) {
+    if (turningSide == 0) {
+      return;
     }
+    AttackOpponent();
   }
 
   public void onPlacementDone() {
     matchState = MatchState.Battle;
     placer = null;
     turningSide = 1;
+    Input.OnLeftMouseClicked += OnClick;
   }
 
   public async void AttackOpponent() {
@@ -84,6 +72,8 @@ public class Match {
   private void EndGame(int losingSide) {
     matchState = MatchState.End;
     loser = losingSide;
+
+    Input.OnLeftMouseClicked -= OnClick;
 
     OnMatchEnd?.Invoke((loser == 1 ? "AI" : "Player"));
   }

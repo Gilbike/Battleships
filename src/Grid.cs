@@ -62,8 +62,8 @@ public class Grid {
   }
 
   public Vector2 GetHoveredField() {
-    int x = BattleshipGame.Instance.mouseState.X;
-    int y = BattleshipGame.Instance.mouseState.Y;
+    float x = Input.MouseLocation.X;
+    float y = Input.MouseLocation.Y;
     for (int row = 0; row < 10; row++) {
       if (y < position.Y + row * FieldSize || y > position.Y + (row + 1) * FieldSize) {
         continue;
