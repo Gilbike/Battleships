@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -19,6 +20,7 @@ public static class ResourceManager {
   public static Texture2D MissedAttack;
   public static Texture2D Fire;
   public static Texture2D Sunken;
+  public static Texture2D UISurface;
 
   public static void Create(ContentManager Content) {
     Font = Content.Load<SpriteFont>("Content/fonts/UI");
@@ -34,6 +36,8 @@ public static class ResourceManager {
     MissedAttack = Content.Load<Texture2D>("Content/sprites/miss");
     Fire = Content.Load<Texture2D>("Content/sprites/fire");
     Sunken = Content.Load<Texture2D>("Content/sprites/skull");
+    UISurface = new Texture2D(BattleshipGame.Instance.GraphicsDevice, 1, 1);
+    UISurface.SetData(new Color[] { Color.White });
   }
 
   public static Texture2D GetRandomOceanTile() {
