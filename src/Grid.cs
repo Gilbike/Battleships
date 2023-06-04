@@ -157,5 +157,13 @@ public class Grid {
     foreach (Field field in fields) {
       field.Render(batch);
     }
+    if (Encoded) {
+      Vector2 hoveredField = GetHoveredField();
+      if (hoveredField != new Vector2(-1)) {
+        float scale = (FieldSize - 8) / (float)32;
+        Vector2 selectPositon = new Vector2(position.X + hoveredField.X * FieldSize, position.Y + hoveredField.Y * FieldSize);
+        batch.Draw(Resources.ResourceManager.Select, selectPositon + new Vector2(4), null, Color.White, 0f, Vector2.Zero, new Vector2(scale), SpriteEffects.None, 0f);
+      }
+    }
   }
 }
