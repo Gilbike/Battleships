@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using Battleships.Resources;
+using Battleships.UI;
 using System;
 
 namespace Battleships;
@@ -83,6 +84,7 @@ public class BattleshipGame : Game {
     } else {
       EndScreen.Render();
     }
+    UIManager.Render();
     batch.End();
 
     base.Draw(time);

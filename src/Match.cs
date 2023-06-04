@@ -1,8 +1,8 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Battleships.Resources;
+using Battleships.UI;
 
 namespace Battleships;
 
@@ -14,6 +14,8 @@ public class Match {
 
   private ShipPlacer placer;
   private OpponentAI oppenent;
+
+  private MatchHUD hud;
 
   private MatchState matchState = MatchState.Placement;
   private int turningSide; // 1 - localplayer, 0 - opponent
@@ -36,6 +38,11 @@ public class Match {
     _aiPlacer.PlaceRandom();
 
     oppenent = new OpponentAI(playerGrid);
+
+    hud = new MatchHUD();
+    hud.SetLabel("Prepare for battle! Place your ships");
+
+    UIManager.Screen = hud;
   }
 
   private void OnClick(float x, float y) {
@@ -50,6 +57,7 @@ public class Match {
     placer = null;
     turningSide = 1;
     Input.OnLeftMouseClicked += OnClick;
+    hud.SetLabel($"Player's turn");
   }
 
   public async void AttackOpponent() {
@@ -61,11 +69,13 @@ public class Match {
     ResourceManager.SoundEffects["fire"].Play();
     if (!didHitShip) {
       turningSide = 0;
+      hud.SetLabel("AI's turn");
       bool didHitPlayer = false;
       do {
         didHitPlayer = await oppenent.AttackPlayer();
       } while (didHitPlayer);
       turningSide = 1;
+      hud.SetLabel("Player's turn");
     }
   }
 
@@ -82,7 +92,6 @@ public class Match {
     playerGrid.Render(batch);
     if (matchState == MatchState.Battle) {
       opponentGrid.Render(batch);
-      batch.DrawString(ResourceManager.Font, $"{(turningSide == 1 ? "Player" : "AI")}'s turn", new Vector2(10, 320), Color.White);
     }
   }
 }
