@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Battleships.Resources;
 
 namespace Battleships.UI;
 
@@ -26,11 +27,30 @@ public class MainMenu : UIScreen {
     RenderTarget2D background = new RenderTarget2D(BattleshipGame.Instance.GraphicsDevice, (int)screenSize.X, (int)screenSize.Y);
     int widthFit = (int)screenSize.X / 16;
     int heightFit = (int)screenSize.Y / 16;
+
+    int shipCount = BattleshipGame.random.Next(5, 21);
     BattleshipGame.Instance.GraphicsDevice.SetRenderTarget(background);
     BattleshipGame.Instance.Batch.Begin();
     for (int row = 0; row < heightFit; row++) {
       for (int col = 0; col < widthFit; col++) {
-        BattleshipGame.Instance.Batch.Draw(Resources.ResourceManager.GetRandomOceanTile(), new Vector2(col * 16, row * 16), Color.White);
+        BattleshipGame.Instance.Batch.Draw(ResourceManager.GetRandomOceanTile(), new Vector2(col * 16, row * 16), Color.White);
+      }
+    }
+    for (int i = 0; i < shipCount; i++) {
+      int shipSize = BattleshipGame.random.Next(2, 6);
+      ShipOrientation orientation = (ShipOrientation)BattleshipGame.random.Next(2);
+      Vector2 basePosition = new Vector2(BattleshipGame.random.Next(widthFit), BattleshipGame.random.Next(heightFit));
+      bool startWithBack = BattleshipGame.random.Next(100) > 50;
+
+      Texture2D firstSprite = startWithBack ? ResourceManager.ShipBack : ResourceManager.ShipFront;
+      Texture2D lastSprite = startWithBack ? ResourceManager.ShipFront : ResourceManager.ShipBack;
+
+      float rotation = orientation == ShipOrientation.Horizontal ? startWithBack ? 90f : -90f : startWithBack ? 180f : 0;
+      BattleshipGame.Instance.Batch.Draw(firstSprite, new Vector2(basePosition.X * 16, basePosition.Y * 16), null, Color.White, MathHelper.ToRadians(rotation), Vector2.Zero, Vector2.One, SpriteEffects.None, 0f);
+      for (int offset = 1; offset < shipSize; offset++) {
+        Vector2 offsetVector = new Vector2(offset * (1 - (int)orientation) * 16, offset * (int)orientation * 16);
+        Texture2D sprite = offset + 1 == shipSize ? lastSprite : ResourceManager.ShipBody;
+        BattleshipGame.Instance.Batch.Draw(sprite, new Vector2(basePosition.X * 16, basePosition.Y * 16) + offsetVector, null, Color.White, MathHelper.ToRadians(rotation), Vector2.Zero, Vector2.One, SpriteEffects.None, 0f);
       }
     }
     BattleshipGame.Instance.Batch.End();
