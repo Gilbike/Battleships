@@ -52,6 +52,9 @@ public class BattleshipGame : Game {
   }
 
   private void StartNewGame() {
+    mainMenu.StartRequested -= StartNewGame;
+    mainMenu.SettingsRequested -= OpenSettings;
+    mainMenu.ExitRequested -= Exit;
     mainMenu = null;
     currentMatch = new Match();
     currentMatch.OnMatchEnd += OnGameEnded;
