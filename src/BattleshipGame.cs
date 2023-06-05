@@ -29,6 +29,7 @@ public class BattleshipGame : Game {
   private Match currentMatch;
 
   private MainMenu mainMenu;
+  private SettingsMenu settingsMenu;
   private GameOverHUD gameOverHUD;
 
   private BattleshipGame() {
@@ -45,10 +46,7 @@ public class BattleshipGame : Game {
     batch = new SpriteBatch(GraphicsDevice);
     Window.Title = "Battleships";
 
-    mainMenu = new MainMenu();
-    mainMenu.StartRequested += StartNewGame;
-    mainMenu.ExitRequested += Exit;
-    UIManager.Screen = mainMenu;
+    ShowMainMenu();
 
     base.Initialize();
   }
@@ -58,6 +56,29 @@ public class BattleshipGame : Game {
     currentMatch = new Match();
     currentMatch.OnMatchEnd += OnGameEnded;
     gameOverHUD = null;
+  }
+
+  private void OpenSettings() {
+    settingsMenu = new SettingsMenu();
+    settingsMenu.BackRequested += ShowMainMenu;
+    UIManager.Screen = settingsMenu;
+    mainMenu.StartRequested -= StartNewGame;
+    mainMenu.SettingsRequested -= OpenSettings;
+    mainMenu.ExitRequested -= Exit;
+  }
+
+  private void ShowMainMenu() {
+    if (settingsMenu != null) {
+      settingsMenu.BackRequested -= ShowMainMenu;
+      settingsMenu = null;
+    }
+    if (mainMenu == null) {
+      mainMenu = new MainMenu();
+    }
+    mainMenu.StartRequested += StartNewGame;
+    mainMenu.SettingsRequested += OpenSettings;
+    mainMenu.ExitRequested += Exit;
+    UIManager.Screen = mainMenu;
   }
 
   private void OnGameEnded(string winner) {

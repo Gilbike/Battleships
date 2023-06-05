@@ -7,9 +7,11 @@ namespace Battleships.UI;
 
 public class MainMenu : UIScreen {
   private UIButton startButton;
+  private UIButton settingsButton;
   private UIButton exitButton;
 
   public Action StartRequested;
+  public Action SettingsRequested;
   public Action ExitRequested;
 
   public MainMenu() {
@@ -18,9 +20,11 @@ public class MainMenu : UIScreen {
 
     UILabel title = new UILabel(UIManager.ScreenCenter - new Vector2(gameTitleSize.X / 2, gameTitleSize.Y / 2 + 70), "Battleships");
     startButton = new UIButton(UIManager.ScreenCenter - new Vector2(buttonSize.X / 2, buttonSize.Y / 2 - 10), buttonSize, "Start Game");
-    exitButton = new UIButton(UIManager.ScreenCenter - new Vector2(buttonSize.X / 2, buttonSize.Y / 2 - 50), buttonSize, "Exit");
+    settingsButton = new UIButton(UIManager.ScreenCenter - new Vector2(buttonSize.X / 2, buttonSize.Y / 2 - 50), buttonSize, "Settings");
+    exitButton = new UIButton(UIManager.ScreenCenter - new Vector2(buttonSize.X / 2, buttonSize.Y / 2 - 90), buttonSize, "Exit");
 
     startButton.OnButtonPressed += delegate () { StartRequested?.Invoke(); };
+    settingsButton.OnButtonPressed += delegate () { SettingsRequested?.Invoke(); };
     exitButton.OnButtonPressed += delegate () { ExitRequested?.Invoke(); };
 
     Vector2 screenSize = new Vector2(UIManager.ScreenCenter.X * 2, UIManager.ScreenCenter.Y * 2);
@@ -61,6 +65,7 @@ public class MainMenu : UIScreen {
 
     Elements.Add(title);
     Elements.Add(startButton);
+    Elements.Add(settingsButton);
     Elements.Add(exitButton);
   }
 }
