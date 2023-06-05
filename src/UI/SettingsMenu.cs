@@ -20,6 +20,7 @@ public class SettingsMenu : UIScreen {
     backButton.OnButtonPressed += delegate () { BackRequested?.Invoke(); };
 
     soundToggle = new UIToggle(UIManager.ScreenCenter - new Vector2(-115, settingsTitleSize.Y / 2 - (totalHeight / 2) + 67), new Vector2(35, 35));
+    soundToggle.Enabled = Settings.SettingsManager.EnableSounds;
 
     Elements.Add(backButton);
     Elements.Add(soundToggle);

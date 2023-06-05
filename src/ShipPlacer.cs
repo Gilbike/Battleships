@@ -83,7 +83,9 @@ public class ShipPlacer {
     if (!isHeldPlacementValid) {
       return;
     }
-    ResourceManager.SoundEffects["deploy"].Play();
+    if (Settings.SettingsManager.EnableSounds) {
+      ResourceManager.SoundEffects["deploy"].Play();
+    }
     grid.PlaceShip(currentShip);
     unplacedShips.RemoveAt(unplacedShipIndex);
     if (unplacedShips.Count == 0) {

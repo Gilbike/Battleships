@@ -66,7 +66,9 @@ public class Match {
       return;
     }
     bool didHitShip = opponentGrid.AttackField(clickedField);
-    ResourceManager.SoundEffects["fire"].Play();
+    if (Settings.SettingsManager.EnableSounds) {
+      ResourceManager.SoundEffects["fire"].Play();
+    }
     if (!didHitShip) {
       turningSide = 0;
       hud.SetLabel("AI's turn");
