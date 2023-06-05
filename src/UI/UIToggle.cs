@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Battleships.Resources;
@@ -12,6 +13,8 @@ public class UIToggle : UIElement {
 
   public bool Enabled { get; set; }
 
+  public Action OnToggle;
+
   public UIToggle(Vector2 position, Vector2 size) : base(position) {
     this.size = size;
     Enabled = false;
@@ -21,6 +24,7 @@ public class UIToggle : UIElement {
   private void OnClick(float x, float y) {
     if (x >= position.X && y >= position.Y && x <= position.X + size.X && y <= position.Y + size.Y) {
       Enabled = !Enabled;
+      OnToggle?.Invoke();
     }
   }
 
