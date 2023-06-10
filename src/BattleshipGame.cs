@@ -65,9 +65,14 @@ public class BattleshipGame : Game {
     UIManager.Screen = settingsMenu;
   }
 
+  private void OpenMultiplayerScreen() {
+
+  }
+
   private void ShowMainMenu() {
     mainMenu = new MainMenu();
     mainMenu.StartRequested += StartNewGame;
+    mainMenu.MultiplayerRequested += OpenMultiplayerScreen;
     mainMenu.SettingsRequested += OpenSettings;
     mainMenu.ExitRequested += Exit;
     UIManager.Screen = mainMenu;

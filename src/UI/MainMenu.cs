@@ -12,6 +12,7 @@ public class MainMenu : UIScreen {
   private UIButton exitButton;
 
   public Action StartRequested;
+  public Action MultiplayerRequested;
   public Action SettingsRequested;
   public Action ExitRequested;
 
@@ -26,6 +27,7 @@ public class MainMenu : UIScreen {
     exitButton = new UIButton(UIManager.ScreenCenter - new Vector2(buttonSize.X / 2, buttonSize.Y / 2 - 130), buttonSize, "Exit");
 
     startButton.OnButtonPressed += delegate () { StartRequested?.Invoke(); };
+    multiplayerButton.OnButtonPressed += delegate () { MultiplayerRequested?.Invoke(); };
     settingsButton.OnButtonPressed += delegate () { SettingsRequested?.Invoke(); };
     exitButton.OnButtonPressed += delegate () { ExitRequested?.Invoke(); };
 
