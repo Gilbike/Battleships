@@ -7,6 +7,7 @@ namespace Battleships.UI;
 
 public class MainMenu : UIScreen {
   private UIButton startButton;
+  private UIButton multiplayerButton;
   private UIButton settingsButton;
   private UIButton exitButton;
 
@@ -19,9 +20,10 @@ public class MainMenu : UIScreen {
     Vector2 gameTitleSize = Resources.ResourceManager.Font.MeasureString("Battleships");
 
     UILabel title = new UILabel(UIManager.ScreenCenter - new Vector2(gameTitleSize.X / 2, gameTitleSize.Y / 2 + 70), "Battleships");
-    startButton = new UIButton(UIManager.ScreenCenter - new Vector2(buttonSize.X / 2, buttonSize.Y / 2 - 10), buttonSize, "Start Game");
-    settingsButton = new UIButton(UIManager.ScreenCenter - new Vector2(buttonSize.X / 2, buttonSize.Y / 2 - 50), buttonSize, "Settings");
-    exitButton = new UIButton(UIManager.ScreenCenter - new Vector2(buttonSize.X / 2, buttonSize.Y / 2 - 90), buttonSize, "Exit");
+    startButton = new UIButton(UIManager.ScreenCenter - new Vector2(buttonSize.X / 2, buttonSize.Y / 2 - 10), buttonSize, "Singleplayer");
+    multiplayerButton = new UIButton(UIManager.ScreenCenter - new Vector2(buttonSize.X / 2, buttonSize.Y / 2 - 50), buttonSize, "Multiplayer");
+    settingsButton = new UIButton(UIManager.ScreenCenter - new Vector2(buttonSize.X / 2, buttonSize.Y / 2 - 90), buttonSize, "Settings");
+    exitButton = new UIButton(UIManager.ScreenCenter - new Vector2(buttonSize.X / 2, buttonSize.Y / 2 - 130), buttonSize, "Exit");
 
     startButton.OnButtonPressed += delegate () { StartRequested?.Invoke(); };
     settingsButton.OnButtonPressed += delegate () { SettingsRequested?.Invoke(); };
@@ -65,6 +67,7 @@ public class MainMenu : UIScreen {
 
     Elements.Add(title);
     Elements.Add(startButton);
+    Elements.Add(multiplayerButton);
     Elements.Add(settingsButton);
     Elements.Add(exitButton);
   }
