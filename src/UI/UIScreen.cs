@@ -10,4 +10,16 @@ public class UIScreen {
       element.Render();
     }
   }
+
+  public void Enable() {
+    foreach (UIElement element in Elements) {
+      element.Active = true;
+    }
+  }
+
+  public void Disable() {
+    foreach (UIElement element in Elements) {
+      element.Active = false;
+    }
+  }
 }

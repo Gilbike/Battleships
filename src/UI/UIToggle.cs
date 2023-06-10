@@ -22,7 +22,7 @@ public class UIToggle : UIElement {
   }
 
   private void OnClick(float x, float y) {
-    if (x >= position.X && y >= position.Y && x <= position.X + size.X && y <= position.Y + size.Y) {
+    if (x >= position.X && y >= position.Y && x <= position.X + size.X && y <= position.Y + size.Y && Active) {
       Enabled = !Enabled;
       OnToggle?.Invoke();
     }

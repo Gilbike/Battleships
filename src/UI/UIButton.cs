@@ -32,7 +32,7 @@ public class UIButton : UIElement {
   }
 
   private void CheckForClick(float x, float y) {
-    if (hovered) {
+    if (hovered && Active) {
       OnButtonPressed?.Invoke();
     }
   }

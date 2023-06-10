@@ -52,32 +52,21 @@ public class BattleshipGame : Game {
   }
 
   private void StartNewGame() {
-    mainMenu.StartRequested -= StartNewGame;
-    mainMenu.SettingsRequested -= OpenSettings;
-    mainMenu.ExitRequested -= Exit;
-    mainMenu = null;
     currentMatch = new Match();
     currentMatch.OnMatchEnd += OnGameEnded;
     gameOverHUD = null;
   }
 
   private void OpenSettings() {
-    settingsMenu = new SettingsMenu();
+    if (settingsMenu == null) {
+      settingsMenu = new SettingsMenu();
+    }
     settingsMenu.BackRequested += ShowMainMenu;
     UIManager.Screen = settingsMenu;
-    mainMenu.StartRequested -= StartNewGame;
-    mainMenu.SettingsRequested -= OpenSettings;
-    mainMenu.ExitRequested -= Exit;
   }
 
   private void ShowMainMenu() {
-    if (settingsMenu != null) {
-      settingsMenu.BackRequested -= ShowMainMenu;
-      settingsMenu = null;
-    }
-    if (mainMenu == null) {
-      mainMenu = new MainMenu();
-    }
+    mainMenu = new MainMenu();
     mainMenu.StartRequested += StartNewGame;
     mainMenu.SettingsRequested += OpenSettings;
     mainMenu.ExitRequested += Exit;
