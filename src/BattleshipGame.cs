@@ -30,6 +30,7 @@ public class BattleshipGame : Game {
 
   private MainMenu mainMenu;
   private SettingsMenu settingsMenu;
+  private MultiplayerMenu multiplayerMenu;
   private GameOverHUD gameOverHUD;
 
   private BattleshipGame() {
@@ -66,7 +67,11 @@ public class BattleshipGame : Game {
   }
 
   private void OpenMultiplayerScreen() {
-
+    if (multiplayerMenu == null) {
+      multiplayerMenu = new MultiplayerMenu();
+      multiplayerMenu.BackRequested += ShowMainMenu;
+    }
+    UIManager.Screen = multiplayerMenu;
   }
 
   private void ShowMainMenu() {
