@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
+using Battleships.Multiplayer.ClientSide;
 using Battleships.Resources;
 using Battleships.UI;
 using System;
@@ -93,6 +94,7 @@ public class BattleshipGame : Game {
 
   protected override void Update(GameTime gameTime) {
     Input.Update(Mouse.GetState());
+    MultiplayerManager.client?.Poll();
     base.Update(gameTime);
   }
 

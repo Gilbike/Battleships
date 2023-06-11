@@ -1,4 +1,5 @@
 using System;
+using Battleships.Multiplayer.ClientSide;
 using Microsoft.Xna.Framework;
 
 namespace Battleships.UI;
@@ -25,6 +26,7 @@ public class MultiplayerMenu : UIScreen {
     nameInput = new UIEditbox(UIManager.ScreenCenter - new Vector2(150, settingsTitleSize.Y / 2 + totalHeight / 2) + new Vector2(0, 132), new Vector2(300, 30));
 
     startButton = new UIButton(UIManager.ScreenCenter - new Vector2(100, settingsTitleSize.Y / 2 - (totalHeight / 2) + 62), new Vector2(200, 30), "Connect");
+    startButton.OnButtonPressed += delegate () { MultiplayerManager.client = new Client(nameInput.Text); };
 
     backButton = new UIButton(UIManager.ScreenCenter - new Vector2(100, settingsTitleSize.Y / 2 - (totalHeight / 2) + 30), new Vector2(200, 30), "Back");
     backButton.OnButtonPressed += delegate () { BackRequested?.Invoke(); };
