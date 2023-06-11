@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using Battleships.Resources;
+using Battleships.Settings;
 using Battleships.UI;
 using System;
 
@@ -41,6 +42,7 @@ public class BattleshipGame : Game {
   protected override void Initialize() {
     Input.Init();
 
+    SettingsManager.Load();
     ResourceManager.Create(Content);
 
     batch = new SpriteBatch(GraphicsDevice);
